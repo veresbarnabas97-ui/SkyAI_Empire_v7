@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkyAI Empire | Web3 Terminal</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
 
+    <div class="video-bg">
+        <div class="overlay"></div>
+    </div>
+
+    <div class="terminal-container">
+        
+        <header>
+            <div class="logo">🌌 SKY_AI <span class="blink">V7.0</span></div>
+            <button id="connect-btn" class="neon-btn">🔌 CONNECT WALLET</button>
+        </header>
+
+        <main class="grid-layout">
+            
+            <section class="panel left-panel">
+                <h3>📊 LIVE MARKET FEED</h3>
+                <div class="chart-box">
+                    <div class="tradingview-widget-container">
+                        <div id="tradingview_12345"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                        <script type="text/javascript">
+                        new TradingView.widget({
+                            "width": "100%",
+                            "height": 300,
+                            "symbol": "BINANCE:BNBUSDT",
+                            "interval": "D",
+                            "timezone": "Etc/UTC",
+                            "theme": "dark",
+                            "style": "1",
+                            "locale": "en",
+                            "toolbar_bg": "#f1f3f6",
+                            "enable_publishing": false,
+                            "allow_symbol_change": true,
+                            "container_id": "tradingview_12345"
+                        });
+                        </script>
+                    </div>
+                    </div>
+            </section>
+
+            <section class="panel center-panel">
+                <div class="hologram-box">
+                    <h2>🚀 PRIVATE PRE-SALE</h2>
+                    <p class="status">STATUS: <span style="color:#0f0">ACTIVE</span></p>
+                    
+                    <div class="input-group">
+                        <label>BNB AMOUNT:</label>
+                        <input type="number" id="bnb-amount" value="0.01" step="0.01">
+                    </div>
+                    
+                    <div class="conversion-rate">
+                        1 BNB = 1,000,000 SKY
+                    </div>
+
+                    <button id="buy-btn" class="mega-btn">INITIATE TRANSFER</button>
+                    
+                    <p class="small-text">Target Protocol: BEP-20 (BSC)</p>
+                </div>
+            </section>
+
+            <section class="panel right-panel">
+                <h3>PROTOCOL ACCESS</h3>
+                <ul class="nav-links">
+                    <li><a href="#">🐳 WHALE VAULT (VIP)</a></li>
+                    <li><a href="#">🎯 SNIPER SIGNALS</a></li>
+                    <li><a href="#">📄 WHITEPAPER</a></li>
+                    <li><a href="Profile/index.html">👤 FOUNDER DASHBOARD</a></li>
+                </ul>
+            </section>
+
+        </main>
+
+        <footer>
+            <p>SYSTEM STATUS: <span style="color:#0f0">ONLINE</span> | NETWORK: BSC MAINNET (ID: 56)</p>
+            <p>© 2025 SkyAI Protocol. Architected by Veres Barnabás.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
