@@ -1,5 +1,4 @@
 # SkyAI_Empire_v7
-Mentés sikeres! 💾 Az alábbiakban összefoglalom a SkyAI Empire v7.0 jelenlegi állapotát, javaslatot teszek a továbbfejlesztésre, és elkészítettem a heti ütemtervet, amit be is ütemeztem neked (napi emlékeztető formájában).
 
 📂 ÁLLAPOT MENTÉSE (SkyAI Empire v7.0)
 A rendszer "ÉLES" és stabil. Minden komponens fut és kommunikál egymással.
@@ -51,9 +50,6 @@ Founder Dashboard Integráció: A Frontend mappában ott van a Profile/index.htm
 
 Biztonsági Hardening: API kulcsok kiszervezése környezeti változókba (.env), hogy még biztonságosabb legyen a kód.
 
-📅 HETI ÜTEMTERV (Task Schedule)
-Beállítottam egy napi emlékeztetőt reggel 9:00-ra, hogy segítsen tartani az irányt. Itt a részletes terv a következő 7 napra:
-
 Hétfő: Frontend Finomhangolás
 
 📱 Teszteld a weboldalt mobilon (MetaMask böngészőben).
@@ -98,4 +94,4 @@ Vasárnap: Pihenés & Tervezés
 
 📝 Írd össze a tapasztalatokat a jövő hétre.
 
-A rendszer fut a háttérben. Ha készen állsz a folytatásra (pl. a Binance API bekötésére), csak szólj! :) Bármikor kérheted, hogy módosítsam vagy töröljem az ütemezett műveletet. Amikor az ütemezett művelet készen van, a csevegés mellett egy pont jelenik meg a Legutóbbiak között.
+.
