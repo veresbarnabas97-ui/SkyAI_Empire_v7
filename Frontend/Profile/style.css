@@ -1,11 +1,12 @@
-/* ⚜️ Founder's Sanctum Theme */
+/* ⚜️ Founder's Sanctum Theme v2.0 */
 
 :root {
     --gold: #d4af37;
     --dark-gold: #aa8c2c;
     --black: #0a0a0a;
-    --dark-grey: #1a1a1a;
+    --dark-grey: #151515;
     --text-light: #e0e0e0;
+    --border: #333;
 }
 
 * {
@@ -22,73 +23,89 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .dashboard-container {
     display: flex;
-    width: 90%;
-    max-width: 1200px;
+    width: 95%;
+    max-width: 1400px;
     height: 90vh;
     background: var(--dark-grey);
-    box-shadow: 0 0 30px rgba(0,0,0,0.8);
-    border: 1px solid #333;
+    box-shadow: 0 0 50px rgba(0,0,0,0.9);
+    border: 1px solid var(--border);
 }
 
 /* SIDEBAR */
 .sidebar {
-    width: 250px;
-    background: #000;
+    width: 260px;
+    background: #080808;
     padding: 40px 20px;
-    border-right: 1px solid var(--dark-gold);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
 }
 
 .logo {
     font-family: 'Cinzel', serif;
-    font-size: 22px;
+    font-size: 24px;
     color: var(--gold);
-    margin-bottom: 50px;
+    margin-bottom: 60px;
     text-align: center;
-    letter-spacing: 2px;
+    line-height: 1.4;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
-.sidebar ul {
+.menu {
     list-style: none;
+    flex-grow: 1;
 }
 
-.sidebar li {
-    margin-bottom: 20px;
-    padding: 10px;
+.menu li {
+    padding: 15px 10px;
+    margin-bottom: 10px;
     cursor: pointer;
     transition: 0.3s;
-    font-size: 16px;
+    font-size: 15px;
+    border-left: 2px solid transparent;
+    color: #888;
 }
 
-.sidebar li.active, .sidebar li:hover {
+.menu li:hover, .menu li.active {
     color: var(--gold);
     border-left: 2px solid var(--gold);
-    padding-left: 15px;
+    background: rgba(212, 175, 55, 0.05);
+    padding-left: 20px;
+}
+
+.bottom-link {
+    margin-top: auto;
+    border-top: 1px solid #222;
+    padding-top: 20px;
 }
 
 .back-link {
     text-decoration: none;
-    color: #666;
-    font-size: 14px;
+    color: #555;
+    font-size: 13px;
+    display: block;
+    text-align: center;
+    transition: 0.3s;
 }
 
-.back-link:hover {
-    color: #fff;
-}
+.back-link:hover { color: #fff; }
 
 /* MAIN CONTENT */
 main {
     flex-grow: 1;
-    padding: 50px;
+    padding: 40px 60px;
     overflow-y: auto;
+    background: url('https://www.transparenttextures.com/patterns/dark-matter.png'); /* Finom textúra */
 }
 
 header {
     margin-bottom: 40px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border);
     padding-bottom: 20px;
     display: flex;
     justify-content: space-between;
@@ -97,34 +114,44 @@ header {
 
 h1 {
     font-family: 'Cinzel', serif;
-    font-size: 32px;
+    font-size: 36px;
     color: var(--gold);
+    letter-spacing: 1px;
 }
 
-.date {
-    color: #666;
+.date { color: #666; font-size: 14px; margin-top: 5px; }
+
+.user-badge {
+    font-family: 'Cinzel', serif;
+    border: 1px solid var(--dark-gold);
+    padding: 8px 15px;
+    font-size: 12px;
+    letter-spacing: 1px;
 }
 
-/* STATS CARDS */
+/* STATS GRID */
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 25px;
     margin-bottom: 40px;
 }
 
 .card {
-    background: linear-gradient(145deg, #1f1f1f, #151515);
+    background: linear-gradient(145deg, #1a1a1a, #111);
     padding: 25px;
-    border-radius: 4px;
-    border: 1px solid #333;
+    border: 1px solid #2a2a2a;
+    transition: 0.3s;
 }
 
+.card:hover { border-color: var(--dark-gold); }
+
 .card h3 {
-    font-size: 14px;
-    color: #888;
+    font-size: 12px;
+    color: #666;
     margin-bottom: 10px;
     text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .card .value {
@@ -133,57 +160,82 @@ h1 {
     font-weight: 300;
 }
 
-.subtext {
-    font-size: 12px;
-    color: var(--gold);
-}
+.card .subtext { font-size: 12px; color: var(--gold); margin-top: 5px; }
 
-/* SECTIONS */
+/* CONTENT BLOCKS */
 h2 {
     font-family: 'Cinzel', serif;
     color: #fff;
     margin-bottom: 20px;
-    font-size: 20px;
+    font-size: 22px;
     border-left: 3px solid var(--gold);
-    padding-left: 10px;
+    padding-left: 15px;
 }
 
-.roadmap-box, .donation-box {
+.text-block {
     background: #111;
     padding: 30px;
-    margin-bottom: 30px;
+    border: 1px solid #222;
+    line-height: 1.8;
+    color: #ccc;
+    font-size: 15px;
+}
+
+.roadmap-box {
+    background: #111;
+    padding: 30px;
     border: 1px solid #222;
 }
 
-.roadmap-list {
-    list-style: none;
-}
-
+.roadmap-list { list-style: none; }
 .roadmap-list li {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    padding: 12px 0;
     border-bottom: 1px dashed #333;
+    color: #888;
 }
+.roadmap-list li.done { text-decoration: line-through; opacity: 0.6; }
+.roadmap-list li.active { color: var(--gold); font-weight: bold; }
 
-.roadmap-list li.done {
-    color: #666;
-    text-decoration: line-through;
-}
-
-.roadmap-list li.active {
-    color: var(--gold);
-}
-
-.wallet-display {
-    background: #000;
+/* STEPS LIST */
+.steps li { margin-bottom: 10px; }
+.alert-box {
+    background: rgba(212, 175, 55, 0.1);
+    border-left: 3px solid var(--gold);
     padding: 15px;
-    margin-top: 10px;
-    font-family: monospace;
-    border: 1px solid #333;
-    display: flex;
-    justify-content: space-between;
+    color: var(--gold);
+    margin-top: 20px;
 }
 
-.wallet-display span {
-    color: var(--gold);
+/* BOT GRID */
+.bot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
 }
+
+.bot-card {
+    background: #111;
+    border: 1px solid #222;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #fff;
+    transition: 0.3s;
+    display: block;
+}
+
+.bot-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-3px);
+    background: #161616;
+}
+
+.bot-card .icon { font-size: 30px; margin-bottom: 10px; }
+.bot-card h3 { font-size: 14px; margin-bottom: 5px; color: var(--gold); }
+.bot-card p { font-size: 12px; color: #666; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #333; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
