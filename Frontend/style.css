@@ -4,7 +4,7 @@
     --neon-blue: #00f3ff;
     --neon-green: #0aff00;
     --dark-bg: #050505;
-    --panel-bg: rgba(10, 10, 20, 0.85);
+    --panel-bg: rgba(10, 10, 20, 0.9); /* Sötétebb háttér az olvashatóságért */
     --border-color: #333;
 }
 
@@ -81,12 +81,13 @@ header {
     border: none;
     color: black;
     padding: 15px;
-    font-size: 18px;
+    font-size: 16px; /* Kicsit kisebb, hogy kiférjen */
     font-weight: bold;
     cursor: pointer;
     margin-top: 20px;
     text-transform: uppercase;
     font-family: 'Orbitron', sans-serif;
+    letter-spacing: 1px;
 }
 
 .mega-btn:hover {
@@ -101,6 +102,7 @@ header {
     gap: 20px;
     padding: 30px 0;
     flex-grow: 1;
+    overflow: hidden; /* Megakadályozza a teljes oldal gördülését */
 }
 
 .panel {
@@ -109,6 +111,8 @@ header {
     padding: 20px;
     border-radius: 5px;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .panel::before {
@@ -118,11 +122,14 @@ header {
     background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
 }
 
+/* LEFT & RIGHT PANELS (SCROLLABLE) */
+.left-panel, .right-panel {
+    overflow-y: auto; /* Csak ezek a panelek gördüljenek */
+}
+
 /* CENTER PANEL */
 .center-panel {
     text-align: center;
-    display: flex;
-    flex-direction: column;
     justify-content: center;
 }
 
@@ -135,6 +142,7 @@ header {
     display: block;
     margin-bottom: 5px;
     color: #888;
+    font-size: 12px;
 }
 
 .input-group input {
@@ -145,6 +153,7 @@ header {
     padding: 10px;
     font-size: 18px;
     font-family: 'Orbitron', sans-serif;
+    text-align: center;
 }
 
 /* LINKS */
@@ -153,29 +162,44 @@ header {
 }
 
 .nav-links li {
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 .nav-links a {
     color: #888;
     text-decoration: none;
     display: block;
-    padding: 10px;
+    padding: 8px;
     border-left: 2px solid transparent;
     transition: 0.3s;
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .nav-links a:hover {
-    color: var(--neon-blue);
-    border-left: 2px solid var(--neon-blue);
-    background: rgba(0, 243, 255, 0.05);
+    border-left: 2px solid var(--neon-green);
+    background: rgba(0, 255, 0, 0.1);
+    padding-left: 15px;
 }
 
 /* FOOTER */
 footer {
     text-align: center;
-    padding: 20px;
-    font-size: 12px;
+    padding: 15px;
+    font-size: 11px;
     color: #555;
     border-top: 1px solid #222;
+}
+
+/* SCROLLBAR STYLE */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #000; 
+}
+::-webkit-scrollbar-thumb {
+    background: #333; 
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-blue); 
 }
