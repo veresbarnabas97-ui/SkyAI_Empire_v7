@@ -2,8 +2,8 @@
 // Connects the website to the BSC Blockchain and your PreSale Contract
 
 // --- CONFIGURATION ---
-const PRESALE_CONTRACT_ADDRESS = "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c"; // Your New Contract
-const SKY_TOKEN_ADDRESS = "0xcBbaDC40Cde0F12679a6b0b74fB732E02E60fa83";      // Your Token
+const PRESALE_CONTRACT_ADDRESS = "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c"; // AZ ÚJ, JÓ CÍM
+const SKY_TOKEN_ADDRESS = "0xcBbaDC40Cde0F12679a6b0b74fB732E02E60fa83";      // A TE SKY TOKENED
 const RATE = 1000000; // 1 BNB = 1,000,000 SKY
 
 // Minimal ABI (Only what we need to talk to the contract)
@@ -63,7 +63,7 @@ function handleLogin(address) {
     userAccount = address;
     console.log("Logged in as:", userAccount);
     
-    // Update UI (Optional: Change button text)
+    // Update UI (Change button text)
     const connectBtn = document.getElementById("connect-btn");
     if (connectBtn) {
         connectBtn.innerText = address.substring(0, 6) + "..." + address.substring(38);
@@ -71,7 +71,7 @@ function handleLogin(address) {
     }
 }
 
-// --- 3. BUY FUNCTION ---
+// --- 3. BUY FUNCTION (JAVÍTVA!) ---
 async function buyTokens() {
     if (!userAccount) {
         alert("Please connect your wallet first!");
@@ -81,7 +81,7 @@ async function buyTokens() {
 
     // Get input value (BNB amount)
     const amountInput = document.getElementById("bnb-amount");
-    const bnbAmount = amountInput ? amountInput.value : "0.01"; // Default to 0.01 if input missing
+    const bnbAmount = amountInput ? amountInput.value : "0.01"; 
 
     // Convert BNB to Wei
     const amountInWei = web3.utils.toWei(bnbAmount.toString(), "ether");
@@ -92,16 +92,22 @@ async function buyTokens() {
     try {
         console.log(`Processing buy for ${bnbAmount} BNB...`);
         
-        // Send Transaction
-        await contract.methods.buyTokens().send({
+        // Send Transaction and WAIT for receipt
+        const receipt = await contract.methods.buyTokens().send({
             from: userAccount,
             value: amountInWei,
             gas: 200000 // Gas limit
         });
 
-        alert("✅ Success! Welcome to the SkyAI Empire. Check your wallet for tokens.");
+        // --- SIKERES VÁSÁRLÁS KEZELÉSE ---
+        console.log("Transaction Receipt:", receipt);
+        const txHash = receipt.transactionHash; // Kinyerjük a Hash-t
+
+        alert("✅ SIKER! Átirányítás a Telegram Bot-hoz a VIP aktiváláshoz...");
         
-        // (Optional) Here we could notify the Telegram Bot via backend API
+        // JAVÍTÁS: Helyes Bot név (nincs aláhúzás) + Automata Hash beillesztés
+        // Ez megnyitja a Telegramot úgy, hogy a felhasználónak csak a START-ot kell nyomnia
+        window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
         
     } catch (error) {
         console.error("Purchase failed:", error);
