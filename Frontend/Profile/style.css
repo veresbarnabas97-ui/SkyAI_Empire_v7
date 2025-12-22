@@ -100,7 +100,7 @@ main {
     flex-grow: 1;
     padding: 40px 60px;
     overflow-y: auto;
-    background: url('https://www.transparenttextures.com/patterns/dark-matter.png'); /* Finom textúra */
+    background: url('https://www.transparenttextures.com/patterns/dark-matter.png');
 }
 
 header {
