@@ -1,10 +1,10 @@
 // 🌌 SkyAI Empire v7.0 - Frontend Logic
+// Connects the website to the BSC Blockchain and your PreSale Contract
 
 // --- CONFIGURATION ---
-// Csak az új V7-es címet használjuk vásárlásra a stabilitás miatt
-const PRESALE_CONTRACT_ADDRESS = "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c"; 
-const SKY_TOKEN_ADDRESS = "0xcBbaDC40Cde0F12679a6b0b74fB732E02E60fa83";      
-const RATE = 1000000; 
+const PRESALE_CONTRACT_ADDRESS = "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c"; // Empire v7 Contract
+const SKY_TOKEN_ADDRESS = "0xcBbaDC40Cde0F12679a6b0b74fB732E02E60fa83";      // SKY Token
+const RATE = 1000000; // 1 BNB = 1,000,000 SKY
 
 // Minimal ABI
 const PRESALE_ABI = [
@@ -27,44 +27,52 @@ const PRESALE_ABI = [
 let userAccount = null;
 let web3 = null;
 
-// --- INITIALIZATION ---
+// --- 1. INITIALIZATION ---
 window.addEventListener('load', async () => {
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
+        console.log("🌌 SkyAI: Web3 Uplink Established.");
+        
         const accounts = await web3.eth.getAccounts();
-        if (accounts.length > 0) handleLogin(accounts[0]);
+        if (accounts.length > 0) {
+            handleLogin(accounts[0]);
+        }
     } else {
-        console.log("SkyAI: No wallet found.");
+        console.log("🌌 SkyAI: No wallet found.");
     }
 });
 
-// --- CONNECT ---
+// --- 2. WALLET CONNECTION ---
 async function connectWallet() {
     if (!window.ethereum) {
-        alert("Please install MetaMask!");
+        alert("⚠️ Wallet Not Detected!\n\nPlease install MetaMask or TrustWallet to access the Terminal.");
         return;
     }
     try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         handleLogin(accounts[0]);
     } catch (error) {
-        console.error(error);
+        console.error("Connection failed", error);
     }
 }
 
 function handleLogin(address) {
     userAccount = address;
+    console.log("Logged in as:", userAccount);
+    
+    // UI Update
     const connectBtn = document.getElementById("connect-btn");
     if (connectBtn) {
-        connectBtn.innerText = address.substring(0, 6) + "..." + address.substring(38);
+        connectBtn.innerText = "🟢 " + address.substring(0, 6) + "..." + address.substring(38);
         connectBtn.classList.add("connected");
+        connectBtn.style.borderColor = "#0aff00"; // Green border on connect
     }
 }
 
-// --- BUY FUNCTION ---
+// --- 3. BUY FUNCTION (ENGLISH & DEEP LINK) ---
 async function buyTokens() {
     if (!userAccount) {
-        alert("Kérlek csatlakoztasd a pénztárcád!");
+        alert("⚠️ Access Denied.\n\nPlease CONNECT WALLET first to initiate a transfer.");
         connectWallet();
         return;
     }
@@ -75,36 +83,45 @@ async function buyTokens() {
     const contract = new web3.eth.Contract(PRESALE_ABI, PRESALE_CONTRACT_ADDRESS);
 
     try {
-        // Vásárlás indítása
+        console.log(`Initiating secure transfer: ${bnbAmount} BNB...`);
+        
+        // Send Transaction
         const receipt = await contract.methods.buyTokens().send({
             from: userAccount,
             value: amountInWei,
             gas: 200000 
         });
 
-        // Siker esetén Deep Link megnyitása
-        console.log("Siker:", receipt);
+        // SUCCESS LOGIC
+        console.log("Transaction Confirmed:", receipt);
         const txHash = receipt.transactionHash; 
 
-        // Kis késleltetés a UX miatt
+        // UX Delay for stability
         setTimeout(() => {
-            const confirmed = confirm("✅ SIKERES VÁSÁRLÁS!\n\nKattints az OK gombra a VIP aktiválásához a Telegramon!");
+            // ENGLISH CONFIRMATION MESSAGE
+            const confirmed = confirm(
+                "✅ TRANSACTION SUCCESSFUL!\n\n" +
+                "Welcome to the SkyAI Empire.\n" +
+                "Click OK to activate your VIP Status via our AI Bot."
+            );
+            
             if (confirmed) {
-                // Helyes Bot név (SkyAI_PaymentBot) + Hash paraméter
+                // Deep Link to Bot (With correct PaymentBot Link)
                 window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
             }
         }, 500);
         
     } catch (error) {
-        console.error(error);
-        alert("❌ Hiba: " + (error.message || "Ismeretlen hiba"));
+        console.error("Transaction failed:", error);
+        alert("❌ Transaction Failed.\n\nReason: " + (error.message || "Network Error or Rejected by User."));
     }
 }
 
-// --- EVENTS ---
+// --- 4. EVENT LISTENERS ---
 document.addEventListener("DOMContentLoaded", () => {
     const connectBtn = document.getElementById("connect-btn");
     const buyBtn = document.getElementById("buy-btn");
+
     if (connectBtn) connectBtn.addEventListener("click", connectWallet);
     if (buyBtn) buyBtn.addEventListener("click", buyTokens);
 });
