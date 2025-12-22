@@ -3,76 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyAI | Founder Dashboard</title>
+    <title>SkyAI Empire | Web3 Terminal</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
+    <script src="script.js" defer></script>
 </head>
 <body>
 
-    <div class="dashboard-container">
+    <div class="video-bg">
+        <div class="overlay"></div>
+    </div>
+
+    <div class="terminal-container">
         
-        <aside class="sidebar">
-            <div class="logo">⚜️ SKY_AI</div>
-            <nav>
-                <ul>
-                    <li class="active">Overview</li>
-                    <li>Treasury</li>
-                    <li>Roadmap</li>
-                    <li><a href="../index.html" class="back-link">← Return to Terminal</a></li>
-                </ul>
-            </nav>
-        </aside>
+        <header>
+            <div class="logo">🌌 SKY_AI <span class="blink">EMPIRE V7</span></div>
+            <button id="connect-btn" class="neon-btn">🔌 CONNECT WALLET</button>
+        </header>
 
-        <main>
-            <header>
-                <h1>Founder's Sanctum</h1>
-                <p class="date">Dec 20, 2025</p>
-            </header>
-
-            <section class="stats-grid">
-                <div class="card">
-                    <h3>Total Raised (BNB)</h3>
-                    <p class="value">0.00 BNB</p>
-                    <span class="subtext">Target: 500 BNB</span>
+        <main class="grid-layout">
+            
+            <section class="panel left-panel">
+                <h3>📊 LIVE MARKET FEED</h3>
+                <div class="chart-box">
+                    <div class="tradingview-widget-container">
+                        <div id="tradingview_12345"></div>
+                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+                        <script type="text/javascript">
+                        new TradingView.widget({
+                            "width": "100%",
+                            "height": 300,
+                            "symbol": "BINANCE:BNBUSDT",
+                            "interval": "D",
+                            "timezone": "Etc/UTC",
+                            "theme": "dark",
+                            "style": "1",
+                            "locale": "en",
+                            "toolbar_bg": "#f1f3f6",
+                            "enable_publishing": false,
+                            "allow_symbol_change": true,
+                            "container_id": "tradingview_12345"
+                        });
+                        </script>
+                    </div>
                 </div>
-                <div class="card">
-                    <h3>VIP Members</h3>
-                    <p class="value">1</p>
-                    <span class="subtext">Active Guardians</span>
-                </div>
-                <div class="card">
-                    <h3>System Status</h3>
-                    <p class="value" style="color: #d4af37">OPTIMAL</p>
-                    <span class="subtext">All Bots Running</span>
+                <div style="margin-top: 15px; font-size: 12px; color: #888;">
+                    <p>📡 AI SIGNAL STATUS: <span style="color:#0f0">BULLISH</span></p>
+                    <p>🐋 WHALE ACTIVITY: <span style="color:orange">HIGH</span></p>
                 </div>
             </section>
 
-            <section class="roadmap-box">
-                <h2>🏛️ Empire Roadmap</h2>
-                <ul class="roadmap-list">
-                    <li class="done">✅ <strong>Phase 1:</strong> Architecture & Contracts Deployed</li>
-                    <li class="done">✅ <strong>Phase 2:</strong> AI Triad Activation (Bots Online)</li>
-                    <li class="active">🔄 <strong>Phase 3:</strong> Marketing & User Acquisition</li>
-                    <li>⏳ <strong>Phase 4:</strong> CEX Listing & Liquidity Lock</li>
-                </ul>
+            <section class="panel center-panel">
+                <div class="hologram-box">
+                    <h2>🚀 SKY EMPIRE PRESALE</h2>
+                    <p class="status">SYSTEM: <span style="color:#0f0">ONLINE (V7)</span></p>
+                    
+                    <div class="input-group">
+                        <label>BNB AMOUNT (BEP-20):</label>
+                        <input type="number" id="bnb-amount" value="0.01" step="0.01" placeholder="Min: 0.0017">
+                    </div>
+                    
+                    <div class="conversion-rate">
+                        1 BNB = 1,000,000 SKY
+                    </div>
+
+                    <button id="buy-btn" class="mega-btn">INITIATE TRANSFER</button>
+                    
+                    <p class="small-text">
+                        Contract: <span style="color:var(--neon-blue)">0x1fD...978c</span>
+                    </p>
+                </div>
             </section>
 
-            <section class="donation-box">
-                <h2>Direct Support Line</h2>
-                <p>Support the architecture directly on-chain.</p>
-                <div class="wallet-display">
-                    <span>BNB / BSC:</span>
-                    <code>0xC424c3119e5D1fA6dD91eF72aF25e1F4A260f69C</code>
-                </div>
-                <div class="wallet-display">
-                    <span>SOLANA:</span>
-                    <code>4iubzdpP14Mo32iRseD7nZEhP1RVLWjjwbsh228uBk3z</code>
+            <section class="panel right-panel" style="overflow-y: auto; max-height: 500px;">
+                <h3>📜 TERMINAL DATA</h3>
+                
+                <div style="font-size: 12px; line-height: 1.6; color: #aaa; text-align: left; padding: 10px;">
+                    
+                    <div style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 10px;">
+                        <strong style="color: white;">🔹 TOKEN ADATOK</strong><br>
+                        • Token: $SKY (SkyAI Ecosystem)<br>
+                        • Cím: 0xcBba...fa83<br>
+                        • Hálózat: BNB Smart Chain<br>
+                        • Utility: AI Hozzáférés & Staking
+                    </div>
+
+                    <div style="border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 10px;">
+                        <strong style="color: white;">🛡️ VÁSÁRLÁS MENETE</strong>
+                        <ol style="padding-left: 20px; margin-top: 5px;">
+                            <li>Nyomj a <strong>CONNECT WALLET</strong> gombra (fent).</li>
+                            <li>Írd be a BNB összeget középen.</li>
+                            <li>Kattints az <strong>INITIATE TRANSFER</strong> gombra.</li>
+                            <li>Hagyd jóvá a MetaMask-ban.</li>
+                            <li>Várd meg a felugró ablakot a VIP linkkel!</li>
+                        </ol>
+                    </div>
+                    
+                    <div style="margin-bottom: 10px;">
+                        <strong style="color: white;">📄 WHITEPAPER v1.0 (Kivonat)</strong><br>
+                        <p style="margin-top:5px;">
+                            A SkyAI Empire egy Web3 infrastruktúra, amely valós idejű on-chain elemzéseket és AI-alapú döntéstámogatást biztosít.
+                            A befolyt összeget likviditásra és fejlesztésre fordítjuk.
+                        </p>
+                    </div>
+
+                    <strong style="color: white;">🌐 NAVIGÁCIÓ:</strong>
+                    <ul class="nav-links" style="margin-top: 5px;">
+                        <li><a href="#" style="color:var(--neon-green)">➜ Telegram VIP Bot</a></li>
+                        <li><a href="#" style="color:var(--neon-blue)">➜ BscScan (Contract)</a></li>
+                        <li><a href="Profile/index.html">➜ Founder Dashboard</a></li>
+                    </ul>
+
                 </div>
             </section>
 
         </main>
+
+        <footer>
+            <p>SYSTEM STATUS: <span style="color:#0f0">STABLE</span> | NETWORK: BSC MAINNET (ID: 56)</p>
+            <p>© 2025 SkyAI Protocol. All rights reserved.</p>
+        </footer>
+
     </div>
 
 </body>
