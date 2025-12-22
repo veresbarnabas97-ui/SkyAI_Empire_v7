@@ -3,139 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyAI Empire | Web3 Terminal</title>
+    <title>Founder's Sanctum | SkyAI Empire</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
-    <script src="script.js" defer></script>
+    <script src="dashboard.js" defer></script>
 </head>
 <body>
 
-    <div class="video-bg">
-        <div class="overlay"></div>
-    </div>
-
-    <div class="terminal-container">
+    <div class="dashboard-container">
         
-        <header>
-            <div class="logo">🌌 SKY_AI <span class="blink">EMPIRE V7</span></div>
-            <button id="connect-btn" class="neon-btn">🔌 CONNECT WALLET</button>
-        </header>
-
-        <main class="grid-layout">
+        <aside class="sidebar">
+            <div class="logo">⚜️ SKY_AI <br> <span style="font-size:12px; letter-spacing: 5px;">SANCTUM</span></div>
             
-            <section class="panel left-panel">
-                <h3>📡 MARKET INTELLIGENCE</h3>
-                <div class="chart-box">
-                    <div class="tradingview-widget-container">
-                        <div id="tradingview_12345"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                        <script type="text/javascript">
-                        new TradingView.widget({
-                            "width": "100%",
-                            "height": 300,
-                            "symbol": "BINANCE:BNBUSDT",
-                            "interval": "D",
-                            "timezone": "Etc/UTC",
-                            "theme": "dark",
-                            "style": "1",
-                            "locale": "en",
-                            "toolbar_bg": "#f1f3f6",
-                            "enable_publishing": false,
-                            "allow_symbol_change": true,
-                            "container_id": "tradingview_12345"
-                        });
-                        </script>
+            <ul class="menu">
+                <li class="active" onclick="showSection('overview')">📊 Overview</li>
+                <li onclick="showSection('whitepaper')">📜 Whitepaper v1.0</li>
+                <li onclick="showSection('howtobuy')">🛡️ How to Invest</li>
+                <li onclick="showSection('bots')">🤖 Neural Network</li>
+            </ul>
+
+            <div class="bottom-link">
+                <a href="../index.html" class="back-link">⬅ Back to Terminal</a>
+            </div>
+        </aside>
+
+        <main>
+            <header>
+                <div>
+                    <h1>COMMAND CENTER</h1>
+                    <p class="date" id="current-date">Loading System Time...</p>
+                </div>
+                <div class="user-badge">
+                    <span>STATUS: </span> <span style="color:var(--gold)">FOUNDER / VIP</span>
+                </div>
+            </header>
+
+            <div id="overview" class="content-section">
+                <div class="stats-grid">
+                    <div class="card">
+                        <h3>Token Supply</h3>
+                        <div class="value">100M</div>
+                        <div class="subtext">SKY Ecosystem</div>
+                    </div>
+                    <div class="card">
+                        <h3>PreSale Rate</h3>
+                        <div class="value">1M / BNB</div>
+                        <div class="subtext">Fixed Allocation</div>
+                    </div>
+                    <div class="card">
+                        <h3>System Status</h3>
+                        <div class="value" style="color:#0f0">ONLINE</div>
+                        <div class="subtext">V7 Engine Active</div>
                     </div>
                 </div>
-                <div style="margin-top: 15px; font-size: 12px; color: #aaa; border-top: 1px solid #333; padding-top: 10px;">
-                    <p>🤖 AI SENTIMENT: <span style="color:#0aff00">BULLISH 🟢</span></p>
-                    <p>🌊 WHALE ACCUMULATION: <span style="color:#00f3ff">DETECTED 🔵</span></p>
+
+                <div class="roadmap-box">
+                    <h2>🗺️ EMPIRE ROADMAP 2025</h2>
+                    <ul class="roadmap-list">
+                        <li class="done">✅ Phase 1: Concept & Python Prototype</li>
+                        <li class="active">🚀 Phase 2: Web3 Terminal & PreSale Launch (CURRENT)</li>
+                        <li>⏳ Phase 3: PancakeSwap Listing & Liquidity Lock</li>
+                        <li>🔮 Phase 4: SkyAI Mobile App & Solana Bridge</li>
+                    </ul>
                 </div>
-            </section>
+            </div>
 
-            <section class="panel center-panel">
-                <div class="hologram-box">
-                    <h2>🚀 EXCLUSIVE PRE-SALE ACCESS</h2>
-                    <p class="status">GATEWAY: <span style="color:#0aff00">ONLINE (V7 STABLE)</span></p>
-                    
-                    <div class="input-group">
-                        <label>ENTER BNB AMOUNT (BEP-20):</label>
-                        <input type="number" id="bnb-amount" value="0.01" step="0.01" placeholder="Min: 0.0017 BNB">
-                    </div>
-                    
-                    <div class="conversion-rate">
-                        💎 RATE: 1 BNB = 1,000,000 SKY
-                    </div>
-
-                    <button id="buy-btn" class="mega-btn">⚡ SECURE ALLOCATION NOW</button>
-                    
-                    <p class="small-text">
-                        <span style="color:#888;">Verified Contract:</span> 
-                        <span style="color:var(--neon-blue); letter-spacing: 1px;">0x1fD...978c</span> ✅
-                    </p>
+            <div id="whitepaper" class="content-section" style="display:none;">
+                <h2>📜 EXECUTIVE SUMMARY</h2>
+                <div class="text-block">
+                    <p><strong>SkyAI Empire</strong> is the first decentralized infrastructure designed to bridge Artificial Intelligence with Blockchain analytics.</p>
+                    <br>
+                    <h3>1. THE PROBLEM</h3>
+                    <p>Crypto markets are volatile and flooded with noise. Investors lack real-time, verified data to make safe decisions.</p>
+                    <br>
+                    <h3>2. THE SOLUTION</h3>
+                    <p>The <strong>Web3 Terminal</strong>. An AI-powered dashboard that scans smart contracts for safety, tracks "Whale" wallets, and predicts market trends using the SkyAI Neural Engine.</p>
+                    <br>
+                    <h3>3. TOKEN UTILITY ($SKY)</h3>
+                    <p>The SKY token is the fuel of the ecosystem. It is required to access VIP signals, the Sniper Bot, and the Auto-Trade features.</p>
                 </div>
-            </section>
+            </div>
 
-            <section class="panel right-panel" style="overflow-y: auto; max-height: 500px;">
-                <h3>📜 SYSTEM ARCHITECTURE</h3>
+            <div id="howtobuy" class="content-section" style="display:none;">
+                <h2>🛡️ SECURE INVESTMENT GUIDE</h2>
+                <div class="text-block">
+                    <p>Follow these strict protocols to secure your allocation in the SkyAI Empire.</p>
+                    <br>
+                    <ol class="steps">
+                        <li><strong>PREPARE:</strong> Ensure you have BNB (Smart Chain) in your MetaMask or TrustWallet.</li>
+                        <li><strong>CONNECT:</strong> Go back to the <a href="../index.html" style="color:var(--gold)">Web3 Terminal</a> and click "Connect Wallet".</li>
+                        <li><strong>DEPOSIT:</strong> Enter your BNB amount (Min: 0.0017 BNB) and click "SECURE ALLOCATION".</li>
+                        <li><strong>VERIFY:</strong> Once the transaction is confirmed, copy the TX Hash.</li>
+                        <li><strong>ACTIVATE:</strong> The system will auto-direct you to our Telegram Bot for VIP activation.</li>
+                    </ol>
+                    <br>
+                    <div class="alert-box">
+                        ⚠️ <strong>NOTE:</strong> Only use the official links provided in this dashboard.
+                    </div>
+                </div>
+            </div>
+
+            <div id="bots" class="content-section" style="display:none;">
+                <h2>🤖 NEURAL NETWORK LINKS</h2>
+                <p style="color:#666; margin-bottom: 20px;">Direct access to the Empire's automated infrastructure.</p>
                 
-                <div style="font-size: 12px; line-height: 1.6; color: #ccc; text-align: left; padding: 10px;">
-                    
-                    <div style="margin-bottom: 15px;">
-                        <strong style="color: white; font-size: 14px;">🌐 EXECUTIVE SUMMARY</strong>
-                        <p style="margin-top:5px;">
-                            SkyAI Empire bridges the gap between Artificial Intelligence and Blockchain. 
-                            Our <strong>Web3 Terminal</strong> provides real-time on-chain analytics and AI-driven decision support for smart investors.
-                        </p>
-                    </div>
+                <div class="bot-grid">
+                    <a href="https://t.me/SkyAIBusinessBot" target="_blank" class="bot-card">
+                        <div class="icon">🤖</div>
+                        <h3>BUSINESS HUB</h3>
+                        <p>Manage your account & wallet.</p>
+                    </a>
 
-                    <hr style="border-color: #333; opacity: 0.5;">
+                    <a href="https://t.me/SkyAI_PaymentBot" target="_blank" class="bot-card">
+                        <div class="icon">💰</div>
+                        <h3>PAYMENT VERIFIER</h3>
+                        <p>Submit hashes & Claim VIP.</p>
+                    </a>
 
-                    <div style="margin: 15px 0;">
-                        <strong style="color: white; font-size: 14px;">💎 TOKENOMICS ($SKY)</strong>
-                        <ul style="list-style: none; padding-left: 0; margin-top: 5px;">
-                            <li>🔐 <strong>Network:</strong> BNB Smart Chain (BEP-20)</li>
-                            <li>📜 <strong>Contract:</strong> 0xcBba...fa83</li>
-                            <li>💰 <strong>Supply Cap:</strong> 100,000,000 SKY</li>
-                            <li>🛠️ <strong>Utility:</strong> AI Access, Governance & Staking</li>
-                        </ul>
-                    </div>
+                    <a href="https://t.me/SkyAI00bot" target="_blank" class="bot-card">
+                        <div class="icon">🧠</div>
+                        <h3>THE BRAIN</h3>
+                        <p>Get AI Signals & Analysis.</p>
+                    </a>
 
-                    <hr style="border-color: #333; opacity: 0.5;">
+                    <a href="https://t.me/SkyAI00bot1" target="_blank" class="bot-card">
+                        <div class="icon">📡</div>
+                        <h3>SIGNAL DISPATCHER</h3>
+                        <p>Live Broadcast Channel.</p>
+                    </a>
 
-                    <div style="margin: 15px 0;">
-                        <strong style="color: white; font-size: 14px;">🛡️ HOW TO PARTICIPATE?</strong>
-                        <ol style="padding-left: 20px; margin-top: 5px; color: #aaa;">
-                            <li>Click <strong>🔌 CONNECT WALLET</strong> (Top Right).</li>
-                            <li>Enter your desired <strong>BNB Amount</strong>.</li>
-                            <li>Press <strong>⚡ SECURE ALLOCATION</strong>.</li>
-                            <li>Confirm the transaction in MetaMask.</li>
-                            <li><span style="color:#0aff00">Wait for the VIP Activation Link!</span></li>
-                        </ol>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <strong style="color: white;">🔗 QUICK LINKS:</strong>
-                        <ul class="nav-links" style="margin-top: 5px;">
-                            <li><a href="#" style="color:var(--neon-green)">➜ 🐳 Whale Vault (VIP Channel)</a></li>
-                            <li><a href="#" style="color:var(--neon-blue)">➜ 📄 Read Whitepaper v1.0</a></li>
-                            <li><a href="Profile/index.html">➜ 👤 Founder's Dashboard</a></li>
-                        </ul>
-                    </div>
-
+                    <a href="https://t.me/SkyAIGroup" target="_blank" class="bot-card">
+                        <div class="icon">👥</div>
+                        <h3>SKYAI GROUP</h3>
+                        <p>Join the Community.</p>
+                    </a>
                 </div>
-            </section>
+            </div>
 
         </main>
-
-        <footer>
-            <p>SYSTEM STATUS: <span style="color:#0aff00">OPERATIONAL</span> | NETWORK: BSC MAINNET (ID: 56)</p>
-            <p>© 2025 SkyAI Protocol. Engineered for the Future.</p>
-        </footer>
-
     </div>
 
 </body>
