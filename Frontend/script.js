@@ -2,7 +2,7 @@
 // Connects the website to the BSC Blockchain and your PreSale Contract
 
 // --- CONFIGURATION ---
-const PRESALE_CONTRACT_ADDRESS = "0x236cedc52e23b5450d565188df114fe6f5cc600d"; // Your New Contract
+const PRESALE_CONTRACT_ADDRESS = "0xC424c3119e5D1fA6dD91eF72aF25e1F4A260f69C"; // Your New Contract
 const SKY_TOKEN_ADDRESS = "0xcBbaDC40Cde0F12679a6b0b74fB732E02E60fa83";      // Your Token
 const RATE = 1000000; // 1 BNB = 1,000,000 SKY
 
