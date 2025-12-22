@@ -2,11 +2,12 @@
 // Connects the website to the BSC Blockchain and your PreSale Contract
 
 // --- CONFIGURATION ---
-const PRESALE_CONTRACT_ADDRESS = "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c"; // AZ ÚJ, JÓ CÍM
-const SKY_TOKEN_ADDRESS = "0xcBbaDC40Cde0F12679a6b0b74fB732E02E60fa83";      // A TE SKY TOKENED
+// FIGYELEM: Ez az új, V7-es PreSale szerződés címe!
+const PRESALE_CONTRACT_ADDRESS = "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c"; 
+const SKY_TOKEN_ADDRESS = "0xcBbaDC40Cde0F12679a6b0b74fB732E02E60fa83";      
 const RATE = 1000000; // 1 BNB = 1,000,000 SKY
 
-// Minimal ABI (Only what we need to talk to the contract)
+// Minimal ABI
 const PRESALE_ABI = [
     {
         "inputs": [],
@@ -33,7 +34,6 @@ window.addEventListener('load', async () => {
         web3 = new Web3(window.ethereum);
         console.log("🌌 SkyAI: Web3 initialized.");
         
-        // Check if already connected
         const accounts = await web3.eth.getAccounts();
         if (accounts.length > 0) {
             handleLogin(accounts[0]);
@@ -49,9 +49,7 @@ async function connectWallet() {
         alert("Please install MetaMask or TrustWallet!");
         return;
     }
-
     try {
-        // Request account access
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         handleLogin(accounts[0]);
     } catch (error) {
@@ -63,7 +61,6 @@ function handleLogin(address) {
     userAccount = address;
     console.log("Logged in as:", userAccount);
     
-    // Update UI (Change button text)
     const connectBtn = document.getElementById("connect-btn");
     if (connectBtn) {
         connectBtn.innerText = address.substring(0, 6) + "..." + address.substring(38);
@@ -71,52 +68,49 @@ function handleLogin(address) {
     }
 }
 
-// --- 3. BUY FUNCTION (JAVÍTVA!) ---
+// --- 3. BUY FUNCTION (AUTOMATA TELEGRAM LINKELÉSSEL) ---
 async function buyTokens() {
     if (!userAccount) {
-        alert("Please connect your wallet first!");
+        alert("Kérlek, csatlakoztasd a pénztárcád!");
         connectWallet();
         return;
     }
 
-    // Get input value (BNB amount)
     const amountInput = document.getElementById("bnb-amount");
     const bnbAmount = amountInput ? amountInput.value : "0.01"; 
-
-    // Convert BNB to Wei
     const amountInWei = web3.utils.toWei(bnbAmount.toString(), "ether");
-
-    // Initialize Contract
     const contract = new web3.eth.Contract(PRESALE_ABI, PRESALE_CONTRACT_ADDRESS);
 
     try {
         console.log(`Processing buy for ${bnbAmount} BNB...`);
         
-        // Send Transaction and WAIT for receipt
+        // Tranzakció küldése
         const receipt = await contract.methods.buyTokens().send({
             from: userAccount,
             value: amountInWei,
-            gas: 200000 // Gas limit
+            gas: 200000 
         });
 
-        // --- SIKERES VÁSÁRLÁS KEZELÉSE ---
+        // SIKERES VÁSÁRLÁS LOGIKA
         console.log("Transaction Receipt:", receipt);
-        const txHash = receipt.transactionHash; // Kinyerjük a Hash-t
+        const txHash = receipt.transactionHash; 
 
-        alert("✅ SIKER! Átirányítás a Telegram Bot-hoz a VIP aktiváláshoz...");
-        
-        // JAVÍTÁS: Helyes Bot név (nincs aláhúzás) + Automata Hash beillesztés
-        // Ez megnyitja a Telegramot úgy, hogy a felhasználónak csak a START-ot kell nyomnia
-        window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
+        // Biztonsági késleltetés, hogy a felhasználó biztosan lássa
+        setTimeout(() => {
+            const confirmed = confirm("✅ SIKERES VÁSÁRLÁS!\n\nKattints az OK gombra a VIP aktiválásához a Telegramon!");
+            if (confirmed) {
+                // Ez a link megnyitja a botot és beilleszti a kódot (Deep Link)
+                window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
+            }
+        }, 500);
         
     } catch (error) {
         console.error("Purchase failed:", error);
-        alert("❌ Transaction failed. Reason: " + (error.message || "Unknown error"));
+        alert("❌ Tranzakció sikertelen: " + (error.message || "Ismeretlen hiba"));
     }
 }
 
 // --- 4. EVENT LISTENERS ---
-// Bind buttons when DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
     const connectBtn = document.getElementById("connect-btn");
     const buyBtn = document.getElementById("buy-btn");
