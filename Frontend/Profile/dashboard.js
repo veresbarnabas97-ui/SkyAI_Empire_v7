@@ -1,58 +1,44 @@
-// ⚜️ Founder's Sanctum v7.2
+// ⚜️ Founder's Sanctum v7.3
 
-// AZ ÚJ TOKEN CÍME (Ezt kérdezzük le)
-const TOKEN_ADDRESS = "0x4B30d92243e88907751E016d33A23D3A1A560026";
-// A Tulajdonos címe (Aki a Dashboardot nézi - a Te címed)
-const FOUNDER_ADDRESS = "0xc98415672A80a26bEC29427b7284D65B73c5Ff7B";
+// YOUR DATA
+const OWNER_WALLET = "0xc98415672A80a26bEC29427b7284D65B73c5Ff7B";
+// The NEW Token Address (to check your supply)
+const TOKEN_ADDRESS = "0x4B30d92243e88907751E016d33A23D3A1A560026"; 
 
-// Egyszerű ABI a balance lekérdezéshez
 const MIN_ABI = [
     {"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"}
 ];
 
-// Dátum frissítés
-function updateDate() {
-    const now = new Date();
-    const el = document.getElementById('current-date');
-    if(el) el.innerText = now.toLocaleString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute:'2-digit' }).toUpperCase();
-}
-
 async function initDashboard() {
     updateDate();
     
-    // Web3 Adatok betöltése
     if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
         try {
-            const contract = new web3.eth.Contract(MIN_ABI, TOKEN_ADDRESS);
+            // 1. Get Token Supply (Your Holdings)
+            const tokenContract = new web3.eth.Contract(MIN_ABI, TOKEN_ADDRESS);
+            const tokenBal = await tokenContract.methods.balanceOf(OWNER_WALLET).call();
+            const tokenFormatted = Math.floor(web3.utils.fromWei(tokenBal, 'ether'));
             
-            // Lekérdezzük, mennyi token van még az Ownernél (Készlet)
-            const balance = await contract.methods.balanceOf(FOUNDER_ADDRESS).call();
-            const formatted = Math.floor(web3.utils.fromWei(balance, 'ether'));
-            
-            // Kijelzés az első kártyán (Token Supply helyett Készlet)
-            const valDiv = document.querySelector('.stats-grid .card:nth-child(1) .value');
-            const subDiv = document.querySelector('.stats-grid .card:nth-child(1) .subtext');
-            
-            if(valDiv) {
-                valDiv.innerText = parseInt(formatted).toLocaleString() + " SKY";
-                valDiv.style.color = "#d4af37"; // Gold color
-            }
-            if(subDiv) subDiv.innerText = "Elérhető Készlet (V7)";
-            
-        } catch (e) {
-            console.log("Dashboard Error (Web3):", e);
-        }
+            // 2. Get BNB Balance (Revenue)
+            const bnbBal = await web3.eth.getBalance(OWNER_WALLET);
+            const bnbFormatted = parseFloat(web3.utils.fromWei(bnbBal, 'ether')).toFixed(4);
+
+            // UPDATE UI
+            // Card 1: Revenue
+            document.querySelector('.stats-grid .card:nth-child(1) .value').innerText = bnbFormatted + " BNB";
+            document.querySelector('.stats-grid .card:nth-child(1) .subtext').innerText = "Total Revenue";
+
+            // Card 2: Supply
+            document.querySelector('.stats-grid .card:nth-child(2) .value').innerText = tokenFormatted.toLocaleString() + " SKY";
+            document.querySelector('.stats-grid .card:nth-child(2) .subtext').innerText = "Remaining Inventory";
+
+        } catch (e) { console.log("Dashboard Error:", e); }
     }
 }
 
-// Navigáció
-function showSection(id) {
-    document.querySelectorAll('.content-section').forEach(d => d.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
-    document.querySelectorAll('.menu li').forEach(l => l.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+function updateDate() {
+    document.getElementById('current-date').innerText = new Date().toLocaleString('en-US').toUpperCase();
 }
 
 document.addEventListener("DOMContentLoaded", initDashboard);
-setInterval(updateDate, 60000);
