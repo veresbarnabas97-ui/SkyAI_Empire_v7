@@ -100,10 +100,10 @@ async function buyTokens() {
         log(`✅ SUCCESS! Hash: ${txHash}`);
         log(`⏳ Redirecting to Payment Bot...`);
         
-        // --- ITT A LÉNYEG: A JAVÍTOTT LINK AZ ÁTIRÁNYÍTÁSHOZ ---
+        // --- JAVÍTVA: A HELYES LINK ---
         setTimeout(() => {
             if(confirm("Transaction Successful! Click OK to activate VIP Protocol.")) {
-                // A helyes bot link a tranzakciós hash-el együtt:
+                // ITT VOLT A HIBA, MOST MÁR A JÓ LINK VAN:
                 window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
             }
         }, 1000);
