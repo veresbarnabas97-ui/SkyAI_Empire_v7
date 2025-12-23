@@ -1,28 +1,41 @@
-const PRESALE_ABI = [
-    { "inputs": [], "name": "totalBnBRaised", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }
+// ⚜️ Founder's Sanctum Logic v7.1
+
+// AZ ÚJ TOKEN CÍME
+const TOKEN_ADDRESS = "0x4B30d92243e88907751E016d33A23D3A1A560026";
+// Token ABI (Csak a balance lekérdezéshez kell)
+const TOKEN_ABI = [
+    {"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"}
 ];
 
-async function updateDashboardStats() {
-    if (typeof window.ethereum !== 'undefined') {
+async function initDashboard() {
+    updateDate();
+    
+    // Web3 Csatlakozás (Read-Only ha nincs wallet, de jobb ha van)
+    if (window.ethereum) {
         const web3 = new Web3(window.ethereum);
-        const contract = new web3.eth.Contract(PRESALE_ABI, "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c");
-
         try {
-            // Valós BNB bevétel lekérése a szerződésből
-            const raisedWei = await contract.methods.totalBnBRaised().call();
-            const raisedBNB = web3.utils.fromWei(raisedWei, 'ether');
-            
-            // UI frissítése (ha léteznek az ID-k)
-            document.querySelector(".stats-grid .card:nth-child(2) .value").innerText = raisedBNB + " BNB";
-            console.log("Dashboard frissítve a blokkláncról.");
+            const accounts = await web3.eth.getAccounts();
+            if (accounts.length > 0) {
+                const user = accounts[0];
+                document.querySelector('.user-badge span:last-child').innerText = "FOUNDER / " + user.substring(0,6) + "..";
+                
+                // Token Egyenleg lekérése
+                const contract = new web3.eth.Contract(TOKEN_ABI, TOKEN_ADDRESS);
+                const balance = await contract.methods.balanceOf(user).call();
+                const skyBalance = web3.utils.fromWei(balance, 'ether'); // Feltételezve 18 tizedesjegyet
+                
+                // Frissítés a kártyán
+                const balanceCard = document.querySelectorAll('.card .value')[0]; // Első kártya
+                balanceCard.innerText = parseFloat(skyBalance).toLocaleString() + " SKY";
+                balanceCard.style.color = "var(--gold)";
+            }
         } catch (e) {
-            console.error("Hiba a statisztikák lekérésekor:", e);
+            console.log("Dashboard Web3 Error:", e);
         }
     }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    updateDashboardStats();
-    // 5 percenként frissít
-    setInterval(updateDashboardStats, 300000);
-});
+// ... (A többi navigációs kód marad a régiben: showSection, updateDate)
+
+document.addEventListener("DOMContentLoaded", initDashboard);
+setInterval(updateDate, 60000);
