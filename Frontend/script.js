@@ -1,12 +1,14 @@
-// 🌌 SkyAI Empire v7.0 - Frontend Logic
-// Connects the website to the BSC Blockchain and your PreSale Contract
+// 🌌 SkyAI Empire v7.1 - Frontend Logic
 
 // --- CONFIGURATION ---
-const PRESALE_CONTRACT_ADDRESS = "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c"; // Empire v7 Contract
-const SKY_TOKEN_ADDRESS = "0xcBbaDC40Cde0F12679a6b0b74fB732E02E60fa83";      // SKY Token
+// 1. A PRESALE CONTRACT (Ahol a BNB landol)
+const PRESALE_ADDRESS = "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c"; 
+// 2. AZ ÚJ TISZTA TOKEN CÍME (Ezt kapják a vevők)
+const SKY_TOKEN_ADDRESS = "0x4B30d92243e88907751E016d33A23D3A1A560026"; 
+
 const RATE = 1000000; // 1 BNB = 1,000,000 SKY
 
-// Minimal ABI
+// Minimal ABI a vásárláshoz
 const PRESALE_ABI = [
     {
         "inputs": [],
@@ -14,114 +16,73 @@ const PRESALE_ABI = [
         "outputs": [],
         "stateMutability": "payable",
         "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "minBuyBNB",
-        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
-        "stateMutability": "view",
-        "type": "function"
     }
 ];
 
-let userAccount = null;
-let web3 = null;
+let web3;
+let userAccount;
 
-// --- 1. INITIALIZATION ---
+// --- INIT & WALLET ---
 window.addEventListener('load', async () => {
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
-        console.log("🌌 SkyAI: Web3 Uplink Established.");
+        document.getElementById('connect-btn').addEventListener('click', connectWallet);
+        document.getElementById('buy-btn').addEventListener('click', buyTokens);
         
-        const accounts = await web3.eth.getAccounts();
-        if (accounts.length > 0) {
-            handleLogin(accounts[0]);
-        }
-    } else {
-        console.log("🌌 SkyAI: No wallet found.");
+        // Input változás figyelése a kalkulátorhoz
+        document.getElementById('bnb-amount').addEventListener('input', updateCalculator);
     }
 });
 
-// --- 2. WALLET CONNECTION ---
 async function connectWallet() {
-    if (!window.ethereum) {
-        alert("⚠️ Wallet Not Detected!\n\nPlease install MetaMask or TrustWallet to access the Terminal.");
-        return;
-    }
     try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        handleLogin(accounts[0]);
-    } catch (error) {
-        console.error("Connection failed", error);
+        userAccount = accounts[0];
+        const btn = document.getElementById("connect-btn");
+        btn.innerText = "🟢 " + userAccount.substring(0, 6) + "...";
+        btn.classList.add("connected");
+    } catch (err) {
+        console.error(err);
     }
 }
 
-function handleLogin(address) {
-    userAccount = address;
-    console.log("Logged in as:", userAccount);
-    
-    // UI Update
-    const connectBtn = document.getElementById("connect-btn");
-    if (connectBtn) {
-        connectBtn.innerText = "🟢 " + address.substring(0, 6) + "..." + address.substring(38);
-        connectBtn.classList.add("connected");
-        connectBtn.style.borderColor = "#0aff00"; // Green border on connect
+// --- CALCULATOR ---
+function updateCalculator() {
+    const bnbInput = document.getElementById('bnb-amount').value;
+    const skyOutput = bnbInput * RATE;
+    // Megjelenítés a felületen (Ha van erre dedikált hely, vagy a gomb szövegében)
+    const display = document.querySelector('.conversion-rate');
+    if(display) {
+        display.innerHTML = `💎 KAPSZ: <strong>${skyOutput.toLocaleString()} SKY</strong> (ÚJ V7)`;
     }
 }
 
-// --- 3. BUY FUNCTION (ENGLISH & DEEP LINK) ---
+// --- BUY FUNCTION ---
 async function buyTokens() {
-    if (!userAccount) {
-        alert("⚠️ Access Denied.\n\nPlease CONNECT WALLET first to initiate a transfer.");
-        connectWallet();
-        return;
-    }
+    if (!userAccount) return alert("⚠️ Csatlakoztasd a Walleted!");
+    
+    const amountBNB = document.getElementById("bnb-amount").value;
+    if (amountBNB < 0.0017) return alert("⚠️ Minimum: 0.0017 BNB");
 
-    const amountInput = document.getElementById("bnb-amount");
-    const bnbAmount = amountInput ? amountInput.value : "0.01"; 
-    const amountInWei = web3.utils.toWei(bnbAmount.toString(), "ether");
-    const contract = new web3.eth.Contract(PRESALE_ABI, PRESALE_CONTRACT_ADDRESS);
+    const amountWei = web3.utils.toWei(amountBNB.toString(), "ether");
+    const contract = new web3.eth.Contract(PRESALE_ABI, PRESALE_ADDRESS);
 
     try {
-        console.log(`Initiating secure transfer: ${bnbAmount} BNB...`);
-        
-        // Send Transaction
+        // Tranzakció küldése
         const receipt = await contract.methods.buyTokens().send({
             from: userAccount,
-            value: amountInWei,
-            gas: 200000 
+            value: amountWei,
+            gas: 200000
         });
-
-        // SUCCESS LOGIC
-        console.log("Transaction Confirmed:", receipt);
-        const txHash = receipt.transactionHash; 
-
-        // UX Delay for stability
-        setTimeout(() => {
-            // ENGLISH CONFIRMATION MESSAGE
-            const confirmed = confirm(
-                "✅ TRANSACTION SUCCESSFUL!\n\n" +
-                "Welcome to the SkyAI Empire.\n" +
-                "Click OK to activate your VIP Status via our AI Bot."
-            );
-            
-            if (confirmed) {
-                // Deep Link to Bot (With correct PaymentBot Link)
-                window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
-            }
-        }, 500);
+        
+        const txHash = receipt.transactionHash;
+        
+        // Átirányítás a Payment Botra ellenőrzésre
+        if(confirm("✅ SIKER! Kattints az OK-ra a VIP aktiválásához!")) {
+            window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
+        }
         
     } catch (error) {
-        console.error("Transaction failed:", error);
-        alert("❌ Transaction Failed.\n\nReason: " + (error.message || "Network Error or Rejected by User."));
+        alert("❌ Hiba: " + error.message);
     }
 }
-
-// --- 4. EVENT LISTENERS ---
-document.addEventListener("DOMContentLoaded", () => {
-    const connectBtn = document.getElementById("connect-btn");
-    const buyBtn = document.getElementById("buy-btn");
-
-    if (connectBtn) connectBtn.addEventListener("click", connectWallet);
-    if (buyBtn) buyBtn.addEventListener("click", buyTokens);
-});
