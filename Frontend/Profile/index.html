@@ -4,143 +4,153 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Founder's Sanctum | SkyAI Empire</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
     <script src="dashboard.js" defer></script>
 </head>
 <body>
 
-    <div class="dashboard-container">
+    <div class="sanctum-wrapper">
         
         <aside class="sidebar">
-            <div class="logo">⚜️ SKY_AI <br> <span style="font-size:12px; letter-spacing: 5px;">SANCTUM</span></div>
-            
-            <ul class="menu">
-                <li class="active" onclick="showSection('overview')">📊 Overview</li>
-                <li onclick="showSection('whitepaper')">📜 Whitepaper v1.0</li>
-                <li onclick="showSection('howtobuy')">🛡️ How to Invest</li>
-                <li onclick="showSection('bots')">🤖 Neural Network</li>
-            </ul>
+            <div class="brand">
+                <div class="logo-icon">⚜️</div>
+                <div class="logo-text">SKY_AI<br><span class="subtitle">SANCTUM</span></div>
+            </div>
 
-            <div class="bottom-link">
-                <a href="../index.html" class="back-link">⬅ Back to Terminal</a>
+            <nav class="menu">
+                <button class="menu-item active" onclick="switchTab('dashboard')">📊 SYSTEM MONITOR</button>
+                <button class="menu-item" onclick="switchTab('roadmap')">🗺️ ROADMAP 2025</button>
+                <button class="menu-item" onclick="switchTab('whitepaper')">📜 WHITEPAPER v1.0</button>
+                <button class="menu-item" onclick="switchTab('audit')">🛡️ SECURITY AUDIT</button>
+            </nav>
+
+            <div class="footer-status">
+                <p>STATUS: <span style="color:#0aff00">OPERATIONAL</span></p>
+                <p>CORE: v8.2 DUAL</p>
+                <a href="../index.html" class="back-link">⬅ BACK TO TERMINAL</a>
             </div>
         </aside>
 
-        <main>
+        <main class="content-area">
+            
             <header>
-                <div>
-                    <h1>COMMAND CENTER</h1>
-                    <p class="date" id="current-date">Loading System Time...</p>
-                </div>
-                <div class="user-badge">
-                    <span>STATUS: </span> <span style="color:var(--gold)">FOUNDER / VIP</span>
-                </div>
+                <h1 id="page-title">SYSTEM MONITOR</h1>
+                <div class="date-display" id="current-date">INITIALIZING...</div>
             </header>
 
-            <div id="overview" class="content-section">
+            <section id="dashboard" class="tab-content active">
                 <div class="stats-grid">
-                    <div class="card">
-                        <h3>Token Supply</h3>
-                        <div class="value">100M</div>
-                        <div class="subtext">SKY Ecosystem</div>
+                    <div class="stat-card gold">
+                        <div class="card-header">
+                            <span class="icon">💎</span> VIP POOL (VERIFIED)
+                        </div>
+                        <div class="card-value" id="vip-balance">LOADING...</div>
+                        <div class="card-sub">Target: 1,000,000 SKY</div>
+                        <div class="progress-bar"><div class="fill" style="width: 65%"></div></div>
                     </div>
-                    <div class="card">
-                        <h3>PreSale Rate</h3>
-                        <div class="value">1M / BNB</div>
-                        <div class="subtext">Fixed Allocation</div>
+
+                    <div class="stat-card blue">
+                        <div class="card-header">
+                            <span class="icon">🛸</span> MAIN POOL (VOUCHER)
+                        </div>
+                        <div class="card-value" id="main-balance">LOADING...</div>
+                        <div class="card-sub">PreSale Volume</div>
                     </div>
-                    <div class="card">
-                        <h3>System Status</h3>
-                        <div class="value" style="color:#0f0">ONLINE</div>
-                        <div class="subtext">V7 Engine Active</div>
+
+                    <div class="stat-card">
+                        <div class="card-header">
+                            <span class="icon">🔥</span> TOTAL BURNED
+                        </div>
+                        <div class="card-value">0 SKY</div>
+                        <div class="card-sub">Scheduled for Q3</div>
                     </div>
                 </div>
 
-                <div class="roadmap-box">
-                    <h2>🗺️ EMPIRE ROADMAP 2025</h2>
-                    <ul class="roadmap-list">
-                        <li class="done">✅ Phase 1: Concept & Python Prototype</li>
-                        <li class="active">🚀 Phase 2: Web3 Terminal & PreSale Launch (CURRENT)</li>
-                        <li>⏳ Phase 3: PancakeSwap Listing & Liquidity Lock</li>
-                        <li>🔮 Phase 4: SkyAI Mobile App & Solana Bridge</li>
+                <div class="system-log-box">
+                    <h3>📡 LIVE BLOCKCHAIN LOGS</h3>
+                    <ul class="log-list" id="chain-logs">
+                        <li>> Connecting to BSC Mainnet Node...</li>
+                        <li>> Fetching Contract Data (0x4B30...0026)...</li>
+                        <li>> Synchronizing with Dual Core System...</li>
                     </ul>
                 </div>
-            </div>
+            </section>
 
-            <div id="whitepaper" class="content-section" style="display:none;">
-                <h2>📜 EXECUTIVE SUMMARY</h2>
-                <div class="text-block">
-                    <p><strong>SkyAI Empire</strong> is the first decentralized infrastructure designed to bridge Artificial Intelligence with Blockchain analytics.</p>
-                    <br>
-                    <h3>1. THE PROBLEM</h3>
-                    <p>Crypto markets are volatile and flooded with noise. Investors lack real-time, verified data to make safe decisions.</p>
-                    <br>
-                    <h3>2. THE SOLUTION</h3>
-                    <p>The <strong>Web3 Terminal</strong>. An AI-powered dashboard that scans smart contracts for safety, tracks "Whale" wallets, and predicts market trends using the SkyAI Neural Engine.</p>
-                    <br>
-                    <h3>3. TOKEN UTILITY ($SKY)</h3>
-                    <p>The SKY token is the fuel of the ecosystem. It is required to access VIP signals, the Sniper Bot, and the Auto-Trade features.</p>
-                </div>
-            </div>
-
-            <div id="howtobuy" class="content-section" style="display:none;">
-                <h2>🛡️ SECURE INVESTMENT GUIDE</h2>
-                <div class="text-block">
-                    <p>Follow these strict protocols to secure your allocation in the SkyAI Empire.</p>
-                    <br>
-                    <ol class="steps">
-                        <li><strong>PREPARE:</strong> Ensure you have BNB (Smart Chain) in your MetaMask or TrustWallet.</li>
-                        <li><strong>CONNECT:</strong> Go back to the <a href="../index.html" style="color:var(--gold)">Web3 Terminal</a> and click "Connect Wallet".</li>
-                        <li><strong>DEPOSIT:</strong> Enter your BNB amount (Min: 0.0017 BNB) and click "SECURE ALLOCATION".</li>
-                        <li><strong>VERIFY:</strong> Once the transaction is confirmed, copy the TX Hash.</li>
-                        <li><strong>ACTIVATE:</strong> The system will auto-direct you to our Telegram Bot for VIP activation.</li>
-                    </ol>
-                    <br>
-                    <div class="alert-box">
-                        ⚠️ <strong>NOTE:</strong> Only use the official links provided in this dashboard.
+            <section id="roadmap" class="tab-content">
+                <div class="document-paper">
+                    <h2>STRATEGIC TIMELINE 2025</h2>
+                    <div class="timeline">
+                        <div class="timeline-item done">
+                            <div class="marker">✅</div>
+                            <div class="content">
+                                <h3>PHASE 1: THE AWAKENING (Q1)</h3>
+                                <p>SkyAI Concept, Smart Contract Deployment, Web3 Terminal v8.0 Launch, Python Bot Network Activation.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item active">
+                            <div class="marker">🔄</div>
+                            <div class="content">
+                                <h3>PHASE 2: EXPANSION (Q2 - CURRENT)</h3>
+                                <p>VIP Pool Opening, Community Growth (5k+ Members), PancakeSwap Listing Prep, Security Audits.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="marker">🔥</div>
+                            <div class="content">
+                                <h3>PHASE 3: THE LAUNCH (Q3)</h3>
+                                <p>DEX Listing, 1 Year Liquidity Lock, Token Distribution Event, 20% Supply Burn.</p>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="marker">🔮</div>
+                            <div class="content">
+                                <h3>PHASE 4: DOMINANCE (Q4)</h3>
+                                <p>SkyAI Mobile App Beta, AI Trading Bot Release for VIPs, CEX Listings.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <div id="bots" class="content-section" style="display:none;">
-                <h2>🤖 NEURAL NETWORK LINKS</h2>
-                <p style="color:#666; margin-bottom: 20px;">Direct access to the Empire's automated infrastructure.</p>
-                
-                <div class="bot-grid">
-                    <a href="https://t.me/SkyAIBusinessBot" target="_blank" class="bot-card">
-                        <div class="icon">🤖</div>
-                        <h3>BUSINESS HUB</h3>
-                        <p>Manage your account & wallet.</p>
-                    </a>
+            <section id="whitepaper" class="tab-content">
+                <div class="document-paper">
+                    <h2>SKYAI PROTOCOL: WHITEPAPER v1.0</h2>
+                    <p class="doc-meta">Last Updated: March 2025 | Author: SkyAI Founder</p>
+                    <hr>
+                    
+                    <h3>1. EXECUTIVE SUMMARY</h3>
+                    <p>A SkyAI Empire nem csupán egy token, hanem egy ökoszisztéma. Célunk, hogy a mesterséges intelligencia (AI) erejével biztosítsunk valós idejű piaci elemzéseket és biztonságos befektetési környezetet a BNB Smart Chain (BSC) hálózaton.</p>
 
-                    <a href="https://t.me/SkyAI_PaymentBot" target="_blank" class="bot-card">
-                        <div class="icon">💰</div>
-                        <h3>PAYMENT VERIFIER</h3>
-                        <p>Submit hashes & Claim VIP.</p>
-                    </a>
+                    <h3>2. THE DUAL CORE TECHNOLOGY</h3>
+                    <p>A rendszer stabilitását a <strong>Két Sávos (Dual Lane)</strong> disztribúciós rendszer biztosítja:</p>
+                    <ul>
+                        <li><strong>Main Interface:</strong> A tömeges eléréshez, "Voucher" alapú foglalási rendszerrel.</li>
+                        <li><strong>VIP Hub:</strong> Exkluzív csatorna, azonnali "Verified" token transzferrel.</li>
+                    </ul>
 
-                    <a href="https://t.me/SkyAI00bot" target="_blank" class="bot-card">
-                        <div class="icon">🧠</div>
-                        <h3>THE BRAIN</h3>
-                        <p>Get AI Signals & Analysis.</p>
-                    </a>
-
-                    <a href="https://t.me/SkyAI00bot1" target="_blank" class="bot-card">
-                        <div class="icon">📡</div>
-                        <h3>SIGNAL DISPATCHER</h3>
-                        <p>Live Broadcast Channel.</p>
-                    </a>
-
-                    <a href="https://t.me/SkyAIGroup" target="_blank" class="bot-card">
-                        <div class="icon">👥</div>
-                        <h3>SKYAI GROUP</h3>
-                        <p>Join the Community.</p>
-                    </a>
+                    <h3>3. TOKENOMICS ($SKY)</h3>
+                    <ul>
+                        <li><strong>Network:</strong> BSC (BEP-20)</li>
+                        <li><strong>Verified Contract:</strong> 0x4B30d92243e88907751E016d33A23D3A1A560026</li>
+                        <li><strong>Total Supply:</strong> 100,000,000 SKY</li>
+                        <li><strong>Strategy:</strong> 40% PreSale, 20% Burn, 20% Dev (Vested), 10% Marketing.</li>
+                    </ul>
                 </div>
-            </div>
+            </section>
+            
+            <section id="audit" class="tab-content">
+                <div class="document-paper">
+                    <h2>SECURITY & AUDIT REPORT</h2>
+                    <div class="audit-status">
+                        <div class="shield-icon">🛡️</div>
+                        <h3>CONTRACT IS VERIFIED</h3>
+                        <p>The source code has been verified on BscScan.</p>
+                        <a href="https://bscscan.com/address/0x4B30d92243e88907751E016d33A23D3A1A560026#code" target="_blank" class="audit-btn">VIEW ON BSCSCAN</a>
+                    </div>
+                </div>
+            </section>
 
         </main>
     </div>
