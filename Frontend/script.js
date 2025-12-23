@@ -23,10 +23,10 @@ window.addEventListener('load', async () => {
         if (connectBtn) connectBtn.addEventListener("click", connectWallet);
         if (buyBtn) buyBtn.addEventListener("click", sendBNB);
         
-        // Ha van kalkulátor kijelző, itt frissítheted
+        // Kalkulátor
         if (amountInput) {
             amountInput.addEventListener('input', () => {
-                console.log("Kalkulált SKY:", amountInput.value * RATE);
+                // Opcionális: itt lehetne frissíteni a UI-t
             });
         }
     } else {
@@ -49,7 +49,7 @@ async function connectWallet() {
     } catch (e) { console.error(e); }
 }
 
-// --- 3. DIREKT UTALÁS (CONTRACT NÉLKÜL) ---
+// --- 3. DIREKT UTALÁS + AUTOMATA BOT NYITÁS ---
 async function sendBNB() {
     if (!userAccount) {
         alert("⚠️ Kérlek csatlakoztasd a tárcádat!");
@@ -72,7 +72,7 @@ async function sendBNB() {
     try {
         console.log(`Utalás indítása: ${amountBNB} BNB -> ${TARGET_WALLET}`);
         
-        // Tranzakció kérése a MetaMask-tól (eth_sendTransaction)
+        // Tranzakció kérése a MetaMask-tól
         const txHash = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [
@@ -85,24 +85,23 @@ async function sendBNB() {
             ],
         });
 
-        console.log("Siker! Hash:", txHash);
+        console.log("✅ Siker! Hash:", txHash);
         
-        // Késleltetés a UX miatt, majd átirányítás
+        // --- ITT A KULCS: AZONNALI ÁTIRÁNYÍTÁS A BOTRA ---
+        // Kicsit várunk, hogy a MetaMask ablak eltűnjön
         setTimeout(() => {
-            const go = confirm(
-                "✅ SIKERES VÁSÁRLÁS!\n\n" +
-                "A rendszer érzékelte a tranzakciót.\n" +
-                "Kattints az OK-ra a VIP aktiválásához!"
-            );
-            
-            if (go) {
-                // Deep Link a Bot-hoz (Start paraméterrel)
-                window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
+            // Ez a link közvetlenül a Bothoz visz és átadja a Hash-t
+            const botLink = `https://t.me/SkyAI_PaymentBot?start=${txHash}`;
+
+            // A böngészők blokkolják az automatikus ablaknyitást, ha nem felhasználói kattintás váltja ki.
+            // Ezért kell a confirm ablak: amint a user rányom az OK-ra, megnyílik a Telegram.
+            if(confirm("✅ SIKERES VÁSÁRLÁS!\n\nKattints az OK gombra a VIP JOGOSULTSÁG aktiválásához!")) {
+                window.open(botLink, "_blank");
             }
         }, 1000);
 
     } catch (error) {
         console.error(error);
-        alert("❌ Megszakítva: " + (error.message || "A felhasználó elutasította."));
+        alert("❌ Megszakítva: " + (error.message || "A tranzakció elutasítva."));
     }
 }
