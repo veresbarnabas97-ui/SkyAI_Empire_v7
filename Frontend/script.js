@@ -9,50 +9,70 @@ const RATE = 1000000; // 1 BNB = 1M SKY
 let web3;
 let userAccount;
 
+// --- 1. INITIALIZATION ---
 window.addEventListener('load', async () => {
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
+        console.log("🌌 SkyAI: Web3 Uplink Established.");
         
-        // Gombok
-        document.getElementById('connect-btn').addEventListener('click', connectWallet);
-        document.getElementById('buy-btn').addEventListener('click', sendBNB);
+        // Gomb figyelők
+        const connectBtn = document.getElementById("connect-btn");
+        const buyBtn = document.getElementById("buy-btn");
+        const amountInput = document.getElementById("bnb-amount");
+
+        if (connectBtn) connectBtn.addEventListener("click", connectWallet);
+        if (buyBtn) buyBtn.addEventListener("click", sendBNB);
         
-        // Kalkulátor
-        const input = document.getElementById('bnb-amount');
-        if(input) input.addEventListener('input', updateCalc);
+        // Ha van kalkulátor kijelző, itt frissítheted
+        if (amountInput) {
+            amountInput.addEventListener('input', () => {
+                console.log("Kalkulált SKY:", amountInput.value * RATE);
+            });
+        }
+    } else {
+        console.log("⚠️ No Wallet found.");
     }
 });
 
+// --- 2. WALLET CONNECT ---
 async function connectWallet() {
+    if (!window.ethereum) return alert("⚠️ Telepíts MetaMask-ot!");
     try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         userAccount = accounts[0];
-        document.getElementById("connect-btn").innerText = "🟢 " + userAccount.substring(0,6) + "...";
+        
+        const btn = document.getElementById("connect-btn");
+        if(btn) {
+            btn.innerText = "🟢 " + userAccount.substring(0, 6) + "...";
+            btn.classList.add("connected");
+        }
     } catch (e) { console.error(e); }
 }
 
-function updateCalc() {
-    const val = document.getElementById('bnb-amount').value;
-    const sky = val * RATE;
-    // Ha van kijelző elem, frissítsd itt
-    // document.getElementById('sky-calc').innerText = sky + " SKY";
-}
-
-// --- DIREKT UTALÁS FUNKCIÓ ---
+// --- 3. DIREKT UTALÁS (CONTRACT NÉLKÜL) ---
 async function sendBNB() {
-    if (!userAccount) return alert("⚠️ Csatlakoztasd a tárcád!");
+    if (!userAccount) {
+        alert("⚠️ Kérlek csatlakoztasd a tárcádat!");
+        connectWallet();
+        return;
+    }
     
-    const amountBNB = document.getElementById("bnb-amount").value;
-    if (amountBNB < 0.0017) return alert("⚠️ Minimum: 0.0017 BNB");
+    const amountInput = document.getElementById("bnb-amount");
+    const amountBNB = amountInput ? amountInput.value : "0.01";
     
-    // Átváltás Wei-re
+    if (parseFloat(amountBNB) < 0.0017) {
+        alert("⚠️ Minimum vásárlás: 0.0017 BNB");
+        return;
+    }
+    
+    // Átváltás Wei-re és Hex-re a tranzakcióhoz
     const amountWei = web3.utils.toWei(amountBNB.toString(), 'ether');
     const amountHex = web3.utils.toHex(amountWei);
 
     try {
         console.log(`Utalás indítása: ${amountBNB} BNB -> ${TARGET_WALLET}`);
         
-        // Tranzakció kérése a MetaMask-tól
+        // Tranzakció kérése a MetaMask-tól (eth_sendTransaction)
         const txHash = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [
@@ -60,20 +80,29 @@ async function sendBNB() {
                     from: userAccount,
                     to: TARGET_WALLET,
                     value: amountHex,
-                    gas: '0x5208' // 21000 Gas (Standard Transfer)
+                    gas: '0x5208' // 21000 Gas (Standard simple transfer)
                 },
             ],
         });
 
         console.log("Siker! Hash:", txHash);
         
-        // Visszajelzés és Bot indítás
-        if(confirm("✅ SIKERES VÁSÁRLÁS!\n\nKattints az OK-ra a VIP aktiválásához a Botban!")) {
-            window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
-        }
+        // Késleltetés a UX miatt, majd átirányítás
+        setTimeout(() => {
+            const go = confirm(
+                "✅ SIKERES VÁSÁRLÁS!\n\n" +
+                "A rendszer érzékelte a tranzakciót.\n" +
+                "Kattints az OK-ra a VIP aktiválásához!"
+            );
+            
+            if (go) {
+                // Deep Link a Bot-hoz (Start paraméterrel)
+                window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
+            }
+        }, 1000);
 
     } catch (error) {
         console.error(error);
-        alert("❌ Megszakítva: " + error.message);
+        alert("❌ Megszakítva: " + (error.message || "A felhasználó elutasította."));
     }
 }
