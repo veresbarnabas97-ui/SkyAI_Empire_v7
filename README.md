@@ -1,5 +1,29 @@
 # SkyAI_Empire_v7
 
+🌌 SkyAI Empire | Neural Web3 Ecosystem v8.2
+A SkyAI Empire egy új generációs DeFi ökoszisztéma, amely a Mesterséges Intelligencia (AI) elemző képességét ötvözi a Blokklánc transzparenciájával. A rendszer egy teljesen automatizált, Python alapú backend hálózaton fut, amely valós időben kezeli a befektetéseket, a tokenkiosztást és a piaci elemzéseket.
+
+🏗️ Rendszer Architektúra (Dual Core Strategy)
+A rendszer egyedülálló Két Sávos (Dual Lane) stratégiát alkalmaz a stabilitás és az árfolyamvédelem érdekében:
+
+🛣️ SÁV 1: Main Interface (Tömeges Elérés)
+Weboldal: v8.0 Neural Interface
+
+Mechanizmus: "Voucher" Rendszer.
+
+Működés: A felhasználó BNB-t küld, a rendszer azonnal Placeholder (Teszt) Tokent küld vissza, amely "nyugtaként" szolgál a Q3-as indulásig.
+
+Motor: distributor_main.py
+
+💎 SÁV 2: VIP Hub (Exkluzív)
+Weboldal: PreSale Hub
+
+Mechanizmus: Azonnali Tulajdonlás.
+
+Működés: A VIP befektetők Verifikált (Éles) Tokent kapnak azonnal egy elkülönített Pool-ból.
+
+Motor: distributor_vip.py
+
 📂 ÁLLAPOT MENTÉSE (SkyAI Empire v7.0)
 A rendszer "ÉLES" és stabil. Minden komponens fut és kommunikál egymással.
 
