@@ -6,27 +6,36 @@ let userAccount;
 
 function log(msg) {
     const el = document.getElementById('console-log');
-    const time = new Date().toLocaleTimeString();
-    el.innerHTML += `> [${time}] ${msg}<br>`;
-    el.scrollTop = el.scrollHeight;
+    if (el) {
+        const time = new Date().toLocaleTimeString();
+        el.innerHTML += `> [${time}] ${msg}<br>`;
+        el.scrollTop = el.scrollHeight;
+    }
 }
 
 window.addEventListener('load', async () => {
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
         
-        document.getElementById('connect-btn').addEventListener('click', connectWallet);
-        document.getElementById('buy-btn').addEventListener('click', buyTokens);
+        const connectBtn = document.getElementById('connect-btn');
+        const buyBtn = document.getElementById('buy-btn');
+        const bnbInput = document.getElementById('bnb-amount');
+
+        if (connectBtn) connectBtn.addEventListener('click', connectWallet);
+        if (buyBtn) buyBtn.addEventListener('click', buyTokens);
         
-        document.getElementById('bnb-amount').addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value);
-            if(val > 0) {
-                const sky = val * RATE;
-                document.getElementById('sky-amount').value = sky.toLocaleString();
-            } else {
-                document.getElementById('sky-amount').value = "0";
-            }
-        });
+        if (bnbInput) {
+            bnbInput.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                const skyInput = document.getElementById('sky-amount');
+                if(val > 0 && skyInput) {
+                    const sky = val * RATE;
+                    skyInput.value = sky.toLocaleString();
+                } else if (skyInput) {
+                    skyInput.value = "0";
+                }
+            });
+        }
     } else {
         log("⚠️ MetaMask not detected!");
     }
@@ -38,9 +47,11 @@ async function connectWallet() {
         userAccount = accounts[0];
         
         const btn = document.getElementById("connect-btn");
-        btn.innerHTML = `<span style="color:#0aff00">●</span> ${userAccount.substring(0,6)}...`;
-        btn.style.borderColor = "#0aff00";
-        btn.style.color = "#0aff00";
+        if (btn) {
+            btn.innerHTML = `<span style="color:#0aff00">●</span> ${userAccount.substring(0,6)}...`;
+            btn.style.borderColor = "#0aff00";
+            btn.style.color = "#0aff00";
+        }
         
         log(`Wallet Connected: ${userAccount}`);
         
@@ -66,7 +77,9 @@ async function switchToBSC() {
 async function buyTokens() {
     if (!userAccount) return alert("Please Connect Wallet First!");
     
-    const bnbAmt = document.getElementById('bnb-amount').value;
+    const bnbInput = document.getElementById('bnb-amount');
+    const bnbAmt = bnbInput ? bnbInput.value : 0;
+    
     if (bnbAmt < 0.0017) return alert("Minimum buy is 0.0017 BNB");
 
     const amountWei = web3.utils.toWei(bnbAmt, 'ether');
@@ -85,10 +98,12 @@ async function buyTokens() {
         });
 
         log(`✅ SUCCESS! Hash: ${txHash}`);
-        log(`⏳ Processing Voucher...`);
+        log(`⏳ Redirecting to Payment Bot...`);
         
+        // --- ITT A LÉNYEG: A JAVÍTOTT LINK AZ ÁTIRÁNYÍTÁSHOZ ---
         setTimeout(() => {
             if(confirm("Transaction Successful! Click OK to activate VIP Protocol.")) {
+                // A helyes bot link a tranzakciós hash-el együtt:
                 window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
             }
         }, 1000);
