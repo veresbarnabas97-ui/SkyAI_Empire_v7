@@ -3,144 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyAI Empire | Web3 Terminal</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    
+    <title>SkyAI Empire | v8.0 Neural Interface</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
     <script src="script.js" defer></script>
 </head>
 <body>
 
-    <div class="video-bg">
-        <div class="overlay"></div>
-    </div>
-
-    <div class="terminal-container">
+    <div class="app-container">
         
         <header>
-            <div class="logo">🌌 SKY_AI <span class="blink">EMPIRE V7</span></div>
-            <button id="connect-btn" class="neon-btn">🔌 CONNECT WALLET</button>
+            <div class="logo">🌌 SKY_AI <span style="font-size:12px; color:var(--text-dim)">v8.0</span></div>
+            <button id="connect-btn" class="btn-connect">
+                <span>🔌 Connect Wallet</span>
+            </button>
         </header>
 
-        <main class="grid-layout">
+        <main class="main-grid">
             
-            <section class="panel left-panel">
-                <h3>📡 MARKET INTELLIGENCE</h3>
-                <div class="chart-box">
-                    <div class="tradingview-widget-container">
-                        <div id="tradingview_12345"></div>
-                        <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                        <script type="text/javascript">
-                        new TradingView.widget({
-                            "width": "100%",
-                            "height": 300,
-                            "symbol": "BINANCE:BNBUSDT",
-                            "interval": "D",
-                            "timezone": "Etc/UTC",
-                            "theme": "dark",
-                            "style": "1",
-                            "locale": "en",
-                            "toolbar_bg": "#f1f3f6",
-                            "enable_publishing": false,
-                            "allow_symbol_change": true,
-                            "container_id": "tradingview_12345"
-                        });
-                        </script>
-                    </div>
+            <section class="glass-panel">
+                <h2>📡 MARKET DATA <span class="vip-badge">LIVE</span></h2>
+                
+                <div class="stat-row">
+                    <p class="stat-label">BNB PRICE</p>
+                    <p class="stat-value" id="bnb-price-display">$612.45</p>
                 </div>
-                <div style="margin-top: 15px; font-size: 12px; color: #aaa; border-top: 1px solid #333; padding-top: 10px;">
-                    <p>🤖 AI SENTIMENT: <span style="color:#0aff00">BULLISH 🟢</span></p>
-                    <p>🌊 WHALE ACTIVITY: <span style="color:#00f3ff">DETECTED 🔵</span></p>
+                
+                <div class="stat-row">
+                    <p class="stat-label">TOTAL SUPPLY (VERIFIED)</p>
+                    <p class="stat-value" style="color:var(--primary)">100,000,000 SKY</p>
+                    <p style="font-size:10px; color:#555;">Contract: 0x4B30...60026</p>
+                </div>
+
+                <div class="stat-row">
+                    <p class="stat-label">AI SENTIMENT</p>
+                    <p class="stat-value" style="color:var(--secondary)">EXTREME BULLISH</p>
+                </div>
+
+                <div style="margin-top:auto; border-top:1px solid #333; padding-top:15px;">
+                    <p class="stat-label">PRESALE PROGRESS</p>
+                    <div style="width:100%; height:6px; background:#333; margin-top:5px; border-radius:3px;">
+                        <div style="width:65%; height:100%; background:var(--primary); border-radius:3px; box-shadow:0 0 10px var(--primary);"></div>
+                    </div>
+                    <p style="text-align:right; font-size:12px; margin-top:5px; color:var(--primary);">65% FILLED</p>
                 </div>
             </section>
 
-            <section class="panel center-panel">
-                <div class="hologram-box">
-                    <h2>🚀 EXCLUSIVE PRE-SALE ACCESS</h2>
-                    <p class="status">GATEWAY: <span style="color:#0aff00">ONLINE (V7 STABLE)</span></p>
+            <section class="glass-panel center-panel">
+                <h2>🚀 SECURE ALLOCATION</h2>
+                
+                <div class="presale-box">
+                    <div class="token-visual"></div>
                     
-                    <div class="input-group">
-                        <label>ENTER BNB AMOUNT (BEP-20):</label>
-                        <input type="number" id="bnb-amount" value="0.01" step="0.01" placeholder="Min: 0.0017 BNB">
-                    </div>
+                    <h3 style="margin-bottom:20px;">EXCHANGE RATE<br><span style="color:var(--secondary)">1 BNB = 1,000,000 SKY</span></h3>
                     
-                    <div class="conversion-rate">
-                        💎 RATE: 1 BNB = 1,000,000 SKY
+                    <div class="input-wrapper">
+                        <span>BNB</span>
+                        <input type="number" id="bnb-amount" value="0.5" step="0.1">
                     </div>
 
-                    <button id="buy-btn" class="mega-btn">⚡ SECURE ALLOCATION NOW</button>
+                    <div class="input-wrapper">
+                        <span>SKY</span>
+                        <input type="text" id="sky-amount" value="500,000" disabled style="color:var(--text-dim);">
+                    </div>
+
+                    <button id="buy-btn" class="btn-buy">INITIATE TRANSFER ⚡</button>
                     
-                    <p class="small-text">
-                        <span style="color:#888;">Verified Contract:</span> 
-                        <span style="color:var(--neon-blue); letter-spacing: 1px;">0x1fD...978c</span> ✅
+                    <p style="margin-top:15px; font-size:12px; color:#666;">
+                        Minimum Buy: 0.0017 BNB <br>
+                        Auto-Verification via <a href="https://t.me/SkyAI_PaymentBot" target="_blank" style="color:var(--primary)">Payment Bot</a>
                     </p>
                 </div>
             </section>
 
-            <section class="panel right-panel" style="overflow-y: auto; max-height: 500px;">
-                <h3>📜 SYSTEM ARCHITECTURE</h3>
-                
-                <div style="font-size: 12px; line-height: 1.6; color: #ccc; text-align: left; padding: 10px;">
-                    
-                    <div style="margin-bottom: 15px;">
-                        <strong style="color: white; font-size: 14px;">🌐 EXECUTIVE SUMMARY</strong>
-                        <p style="margin-top:5px;">
-                            SkyAI Empire bridges the gap between Artificial Intelligence and Blockchain. 
-                            Our <strong>Web3 Terminal</strong> provides real-time on-chain analytics and AI-driven decision support.
-                        </p>
-                    </div>
+            <section class="glass-panel">
+                <h2>🔗 SYSTEM LINKS</h2>
+                <ul style="list-style:none; line-height:2.5;">
+                    <li><a href="Profile/index.html" style="color:#fff; text-decoration:none;">👤 Founder Dashboard</a></li>
+                    <li><a href="https://t.me/SkyAIBusinessBot" target="_blank" style="color:var(--primary); text-decoration:none;">🤖 Business Bot</a></li>
+                    <li><a href="https://t.me/SkyAI_PaymentBot" target="_blank" style="color:var(--secondary); text-decoration:none;">💰 Payment Verifier</a></li>
+                </ul>
 
-                    <hr style="border-color: #333; opacity: 0.5;">
-
-                    <div style="margin: 15px 0;">
-                        <strong style="color: white; font-size: 14px;">💎 TOKENOMICS ($SKY)</strong>
-                        <ul style="list-style: none; padding-left: 0; margin-top: 5px;">
-                            <li>🔐 <strong>Network:</strong> BNB Smart Chain (BEP-20)</li>
-                            <li>📜 <strong>Contract:</strong> 0xcBba...fa83</li>
-                            <li>💰 <strong>Supply:</strong> 100M+ (PreSale Phase)</li>
-                            <li>🛠️ <strong>Utility:</strong> AI Access, Governance & Staking</li>
-                        </ul>
-                    </div>
-
-                    <hr style="border-color: #333; opacity: 0.5;">
-
-                    <div style="margin: 15px 0;">
-                        <strong style="color: white; font-size: 14px;">🛡️ HOW TO PARTICIPATE?</strong>
-                        <ol style="padding-left: 20px; margin-top: 5px; color: #aaa;">
-                            <li>Click <strong>🔌 CONNECT WALLET</strong>.</li>
-                            <li>Enter desired <strong>BNB Amount</strong>.</li>
-                            <li>Press <strong>⚡ SECURE ALLOCATION</strong>.</li>
-                            <li>Confirm in MetaMask.</li>
-                            <li><span style="color:#0aff00">Wait for the VIP Link popup!</span></li>
-                        </ol>
-                    </div>
-
-                    <div style="margin-top: 20px;">
-                        <strong style="color: white;">🔗 OFFICIAL NEURAL LINKS:</strong>
-                        <ul class="nav-links" style="margin-top: 5px;">
-                            <li><a href="https://t.me/SkyAIBusinessBot" target="_blank" style="color:var(--neon-green)">🤖 Business Hub</a></li>
-                            <li><a href="https://t.me/SkyAI_PaymentBot" target="_blank" style="color:var(--neon-green)">💰 Payment Verifier</a></li>
-                            <li><a href="https://t.me/SkyAI00bot" target="_blank" style="color:var(--neon-green)">🧠 SkyAI Brain (Signals)</a></li>
-                            
-                            <li style="margin-top: 10px;"><a href="https://t.me/SkyAI00bot1" target="_blank" style="color:var(--neon-blue)">📡 Signal Dispatcher (Channel)</a></li>
-                            <li><a href="https://t.me/SkyAIGroup" target="_blank" style="color:var(--neon-blue)">👥 SkyAI Group (Community)</a></li>
-                            
-                            <li style="margin-top: 10px;"><a href="Profile/index.html">👤 Founder's Dashboard</a></li>
-                        </ul>
-                    </div>
-
+                <h2 style="margin-top:30px;">🖥 SYSTEM LOG</h2>
+                <div class="system-log" id="console-log">
+                    > SkyAI Network v8.0 Initialized...<br>
+                    > Connecting to BSC Mainnet...<br>
+                    > Waiting for User Wallet...<br>
                 </div>
             </section>
 
         </main>
-
-        <footer>
-            <p>SYSTEM STATUS: <span style="color:#0aff00">OPERATIONAL</span> | NETWORK: BSC MAINNET (ID: 56)</p>
-            <p>© 2025 SkyAI Protocol. Engineered for the Future.</p>
-        </footer>
-
     </div>
 
 </body>
