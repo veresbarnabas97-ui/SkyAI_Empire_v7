@@ -1,36 +1,59 @@
-/* 🌌 SkyAI Cyber-Theme v7.0 */
+/* 🌌 SkyAI Empire v8.0 - Glassmorphism Core */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
 
 :root {
-    --neon-blue: #00f3ff;
-    --neon-green: #0aff00;
-    --dark-bg: #050505;
-    --panel-bg: rgba(10, 10, 20, 0.9); /* Sötétebb háttér az olvashatóságért */
-    --border-color: #333;
+    --primary: #00f3ff;   /* Cyber Blue */
+    --secondary: #0aff00; /* Hacker Green */
+    --accent: #ff0055;    /* Alert Red */
+    --bg-dark: #050505;
+    --glass: rgba(20, 20, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --text-main: #ffffff;
+    --text-dim: #a0a0a0;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
 
 body {
-    background-color: var(--dark-bg);
-    background-image: radial-gradient(circle at center, #111, #000);
-    color: white;
-    font-family: 'Orbitron', sans-serif;
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(0, 243, 255, 0.08), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(10, 255, 0, 0.05), transparent 25%);
+    color: var(--text-main);
+    font-family: 'Rajdhani', sans-serif;
     height: 100vh;
-    overflow: hidden; /* Terminal feel */
+    overflow: hidden;
+    position: relative;
 }
 
-/* CONTAINER */
-.terminal-container {
-    width: 95%;
-    max-width: 1400px;
+/* HÁTTÉR RÁCS ANIMÁCIÓ */
+body::before {
+    content: "";
+    position: absolute;
+    width: 200%; height: 200%;
+    top: -50%; left: -50%;
+    background: linear-gradient(transparent 95%, rgba(0, 243, 255, 0.1) 50%),
+                linear-gradient(90deg, transparent 95%, rgba(0, 243, 255, 0.1) 50%);
+    background-size: 50px 50px;
+    transform: perspective(500px) rotateX(60deg);
+    animation: gridMove 20s linear infinite;
+    z-index: -1;
+    opacity: 0.3;
+}
+
+@keyframes gridMove {
+    0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+    100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+}
+
+/* FŐ KONTÉNER */
+.app-container {
+    max-width: 1600px;
     margin: 0 auto;
     height: 100vh;
     display: flex;
     flex-direction: column;
+    padding: 20px;
 }
 
 /* HEADER */
@@ -38,168 +61,183 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid var(--neon-blue);
+    padding: 15px 30px;
+    background: var(--glass);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 .logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--neon-blue);
-    text-shadow: 0 0 10px var(--neon-blue);
-}
-
-.blink {
-    animation: blinker 1.5s linear infinite;
-    color: red;
-}
-
-@keyframes blinker {
-    50% { opacity: 0; }
-}
-
-/* BUTTONS */
-.neon-btn {
-    background: transparent;
-    border: 1px solid var(--neon-blue);
-    color: var(--neon-blue);
-    padding: 10px 20px;
-    cursor: pointer;
     font-family: 'Orbitron', sans-serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.btn-connect {
+    background: rgba(0, 243, 255, 0.1);
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    padding: 12px 25px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 8px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-connect:hover {
+    background: var(--primary);
+    color: #000;
+    box-shadow: 0 0 20px var(--primary);
+}
+
+/* GRID LAYOUT */
+.main-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr 350px;
+    gap: 20px;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* PANELEK KÖZÖS STÍLUSA */
+.glass-panel {
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-panel h2 {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary);
+    font-size: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* BAL OLDAL - STATISZTIKA */
+.stat-row {
+    margin-bottom: 20px;
+}
+.stat-label { font-size: 14px; color: var(--text-dim); }
+.stat-value { font-size: 24px; font-weight: bold; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+/* KÖZÉP - PRESALE MOTOR */
+.presale-box {
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.token-visual {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--primary), transparent);
+    box-shadow: 0 0 50px var(--primary);
+    position: relative;
+    animation: pulse 3s infinite;
+}
+
+.token-visual::after {
+    content: "SKY";
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Orbitron';
+    font-size: 30px;
+    font-weight: bold;
+    color: #fff;
+}
+
+@keyframes pulse { 0% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } 100% { opacity: 0.7; transform: scale(1); } }
+
+.input-wrapper {
+    position: relative;
+    max-width: 400px;
+    margin: 0 auto 20px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    background: rgba(0,0,0,0.5);
+    border: 1px solid #333;
+    padding: 15px;
+    color: #fff;
+    font-size: 20px;
+    text-align: right;
+    border-radius: 8px;
+    font-family: 'Orbitron';
+}
+
+.input-wrapper span {
+    position: absolute;
+    left: 15px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.btn-buy {
+    width: 100%;
+    max-width: 400px;
+    background: linear-gradient(45deg, var(--secondary), #004d00);
+    border: none;
+    padding: 18px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    text-transform: uppercase;
+    font-family: 'Orbitron';
+    letter-spacing: 1px;
     transition: 0.3s;
 }
 
-.neon-btn:hover, .neon-btn.connected {
-    background: var(--neon-blue);
-    color: black;
-    box-shadow: 0 0 15px var(--neon-blue);
+.btn-buy:hover { transform: scale(1.02); box-shadow: 0 0 30px var(--secondary); }
+
+/* JOBB OLDAL - RENDSZER */
+.system-log {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: var(--secondary);
+    opacity: 0.8;
+    line-height: 1.5;
 }
 
-.mega-btn {
-    width: 100%;
-    background: var(--neon-green);
-    border: none;
-    color: black;
-    padding: 15px;
-    font-size: 16px; /* Kicsit kisebb, hogy kiférjen */
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 20px;
-    text-transform: uppercase;
-    font-family: 'Orbitron', sans-serif;
-    letter-spacing: 1px;
-}
-
-.mega-btn:hover {
-    background: #fff;
-    box-shadow: 0 0 20px var(--neon-green);
-}
-
-/* LAYOUT GRID */
-.grid-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-    padding: 30px 0;
-    flex-grow: 1;
-    overflow: hidden; /* Megakadályozza a teljes oldal gördülését */
-}
-
-.panel {
-    background: var(--panel-bg);
-    border: 1px solid var(--border-color);
-    padding: 20px;
-    border-radius: 5px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-.panel::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
-}
-
-/* LEFT & RIGHT PANELS (SCROLLABLE) */
-.left-panel, .right-panel {
-    overflow-y: auto; /* Csak ezek a panelek gördüljenek */
-}
-
-/* CENTER PANEL */
-.center-panel {
-    text-align: center;
-    justify-content: center;
-}
-
-.input-group {
-    margin: 20px 0;
-    text-align: left;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #888;
+.vip-badge {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid gold;
+    color: gold;
+    padding: 5px 10px;
+    border-radius: 4px;
     font-size: 12px;
 }
 
-.input-group input {
-    width: 100%;
-    background: #111;
-    border: 1px solid #444;
-    color: var(--neon-green);
-    padding: 10px;
-    font-size: 18px;
-    font-family: 'Orbitron', sans-serif;
-    text-align: center;
-}
-
-/* LINKS */
-.nav-links {
-    list-style: none;
-}
-
-.nav-links li {
-    margin-bottom: 8px;
-}
-
-.nav-links a {
-    color: #888;
-    text-decoration: none;
-    display: block;
-    padding: 8px;
-    border-left: 2px solid transparent;
-    transition: 0.3s;
-    background: rgba(255, 255, 255, 0.02);
-}
-
-.nav-links a:hover {
-    border-left: 2px solid var(--neon-green);
-    background: rgba(0, 255, 0, 0.1);
-    padding-left: 15px;
-}
-
-/* FOOTER */
-footer {
-    text-align: center;
-    padding: 15px;
-    font-size: 11px;
-    color: #555;
-    border-top: 1px solid #222;
-}
-
-/* SCROLLBAR STYLE */
-::-webkit-scrollbar {
-    width: 8px;
-}
-::-webkit-scrollbar-track {
-    background: #000; 
-}
-::-webkit-scrollbar-thumb {
-    background: #333; 
-}
-::-webkit-scrollbar-thumb:hover {
-    background: var(--neon-blue); 
+/* RESPONSIVE */
+@media (max-width: 1000px) {
+    .main-grid { grid-template-columns: 1fr; overflow-y: auto; }
+    .app-container { height: auto; }
 }
