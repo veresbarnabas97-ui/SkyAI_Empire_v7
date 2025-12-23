@@ -1,54 +1,79 @@
-// --- 3. BUY FUNCTION (DIRECT TRANSFER MODE) ---
-async function buyTokens() {
-    if (!userAccount) {
-        alert("⚠️ Kérlek, csatlakoztasd a tárcádat!");
-        connectWallet();
-        return;
-    }
+// 🌌 SkyAI Empire v7.2 - Frontend Logic
 
-    const amountInput = document.getElementById("bnb-amount");
-    const bnbAmount = amountInput ? amountInput.value : "0.01"; 
-    
-    // Ellenőrzés
-    if (parseFloat(bnbAmount) < 0.0017) {
-        alert("⚠️ Minimum vásárlás: 0.0017 BNB");
-        return;
-    }
+// --- KONFIGURÁCIÓ ---
+// IDE utal a vevő (A BSC Owner tárca):
+const TARGET_WALLET = "0xc98415672A80a26bEC29427b7284D65B73c5Ff7B"; 
+// Csak a kalkulációhoz:
+const RATE = 1000000; // 1 BNB = 1M SKY
 
-    // Wei konverzió
-    const amountInWei = web3.utils.toWei(bnbAmount.toString(), "ether");
+let web3;
+let userAccount;
+
+window.addEventListener('load', async () => {
+    if (window.ethereum) {
+        web3 = new Web3(window.ethereum);
+        
+        // Gombok
+        document.getElementById('connect-btn').addEventListener('click', connectWallet);
+        document.getElementById('buy-btn').addEventListener('click', sendBNB);
+        
+        // Kalkulátor
+        const input = document.getElementById('bnb-amount');
+        if(input) input.addEventListener('input', updateCalc);
+    }
+});
+
+async function connectWallet() {
+    try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        userAccount = accounts[0];
+        document.getElementById("connect-btn").innerText = "🟢 " + userAccount.substring(0,6) + "...";
+    } catch (e) { console.error(e); }
+}
+
+function updateCalc() {
+    const val = document.getElementById('bnb-amount').value;
+    const sky = val * RATE;
+    // Ha van kijelző elem, frissítsd itt
+    // document.getElementById('sky-calc').innerText = sky + " SKY";
+}
+
+// --- DIREKT UTALÁS FUNKCIÓ ---
+async function sendBNB() {
+    if (!userAccount) return alert("⚠️ Csatlakoztasd a tárcád!");
     
-    // A Célpont most a Te Wallet Címed (Ezt figyeli a Python)
-    // A config-ból vagy manuálisan beégetve:
-    const TARGET_WALLET = "0xC424c3119e5D1fA6dD91eF72aF25e1F4A260f69C"; 
+    const amountBNB = document.getElementById("bnb-amount").value;
+    if (amountBNB < 0.0017) return alert("⚠️ Minimum: 0.0017 BNB");
+    
+    // Átváltás Wei-re
+    const amountWei = web3.utils.toWei(amountBNB.toString(), 'ether');
+    const amountHex = web3.utils.toHex(amountWei);
 
     try {
-        console.log(`Initiating transfer to Founder: ${bnbAmount} BNB...`);
+        console.log(`Utalás indítása: ${amountBNB} BNB -> ${TARGET_WALLET}`);
         
-        // Sima tranzakció küldése
+        // Tranzakció kérése a MetaMask-tól
         const txHash = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [
                 {
                     from: userAccount,
                     to: TARGET_WALLET,
-                    value: web3.utils.toHex(amountInWei),
-                    gas: '0x5208' // 21000 GWEI (Standard transfer gas)
+                    value: amountHex,
+                    gas: '0x5208' // 21000 Gas (Standard Transfer)
                 },
             ],
         });
 
-        console.log("Tx Hash:", txHash);
-
-        // UX + Átirányítás
-        setTimeout(() => {
-            if (confirm("✅ SIKER! A SkyAI Rendszer észlelte a befizetést.\n\nKattints az OK-ra a VIP Aktiváláshoz!")) {
-                window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
-            }
-        }, 1000);
+        console.log("Siker! Hash:", txHash);
         
+        // Visszajelzés és Bot indítás
+        if(confirm("✅ SIKERES VÁSÁRLÁS!\n\nKattints az OK-ra a VIP aktiválásához a Botban!")) {
+            window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
+        }
+
     } catch (error) {
-        console.error("Transaction failed:", error);
-        alert("❌ Megszakítva vagy Hiba: " + error.message);
+        console.error(error);
+        alert("❌ Megszakítva: " + error.message);
     }
 }
