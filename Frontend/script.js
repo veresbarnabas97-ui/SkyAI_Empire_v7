@@ -1,93 +1,103 @@
-// 🌌 SkyAI Empire v7.3 - Revenue Engine
-
-// --- CONFIGURATION ---
-// 💰 YOUR WALLET (Where the BNB goes):
-const OWNER_WALLET = "0xc98415672A80a26bEC29427b7284D65B73c5Ff7B"; 
-// 💎 RATE (Display only):
-const RATE = 1000000; // 1 BNB = 1M SKY
+const OWNER_WALLET = "0xc98415672A80a26bEC29427b7284D65B73c5Ff7B"; // IDE RAKD AZ ÚJ BIZTONSÁGOS TÁRCÁD CÍMÉT!
+const RATE = 1000000; 
 
 let web3;
 let userAccount;
+
+// Console log helper
+function log(msg) {
+    const el = document.getElementById('console-log');
+    const time = new Date().toLocaleTimeString();
+    el.innerHTML += `> [${time}] ${msg}<br>`;
+    el.scrollTop = el.scrollHeight;
+}
 
 window.addEventListener('load', async () => {
     if (window.ethereum) {
         web3 = new Web3(window.ethereum);
         
-        // Event Listeners
         document.getElementById('connect-btn').addEventListener('click', connectWallet);
-        document.getElementById('buy-btn').addEventListener('click', sendPayment);
+        document.getElementById('buy-btn').addEventListener('click', buyTokens);
         
-        // Calculator Logic
+        // Dynamic Calculator
         document.getElementById('bnb-amount').addEventListener('input', (e) => {
-            const val = e.target.value;
-            const sky = val * RATE;
-            // You can add a span in HTML with id="calc-display" to show this
-            // document.getElementById('calc-display').innerText = sky.toLocaleString() + " SKY";
+            const val = parseFloat(e.target.value);
+            if(val > 0) {
+                const sky = val * RATE;
+                document.getElementById('sky-amount').value = sky.toLocaleString();
+            } else {
+                document.getElementById('sky-amount').value = "0";
+            }
         });
+    } else {
+        log("⚠️ MetaMask not detected!");
     }
 });
 
-// --- 1. CONNECT ---
 async function connectWallet() {
-    if (!window.ethereum) return alert("⚠️ Please install MetaMask!");
     try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         userAccount = accounts[0];
-        document.getElementById("connect-btn").innerText = "🟢 " + userAccount.substring(0,6) + "...";
-        document.getElementById("connect-btn").classList.add("connected");
-    } catch (e) { console.error(e); }
+        
+        // UI Update
+        const btn = document.getElementById("connect-btn");
+        btn.innerHTML = `<span style="color:#0aff00">●</span> ${userAccount.substring(0,6)}...${userAccount.substring(38)}`;
+        btn.style.borderColor = "#0aff00";
+        
+        log(`Wallet Connected: ${userAccount}`);
+        
+        // Check Network (Switch to BSC)
+        const chainId = await web3.eth.getChainId();
+        if (chainId !== 56) {
+            switchToBSC();
+        }
+        
+    } catch (e) { log("Connection Error: " + e.message); }
 }
 
-// --- 2. PAY (DIRECT TRANSFER) ---
-async function sendPayment() {
-    if (!userAccount) {
-        alert("⚠️ Please Connect Wallet First!");
-        connectWallet();
-        return;
+async function switchToBSC() {
+    try {
+        await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0x38' }], // 56 in hex
+        });
+    } catch (error) {
+        log("Please switch to Binance Smart Chain manually.");
     }
-    
-    const amountInput = document.getElementById("bnb-amount");
-    const bnbValue = amountInput.value;
-    
-    if (bnbValue < 0.0017) {
-        alert("⚠️ Minimum Investment: 0.0017 BNB");
-        return;
-    }
+}
 
-    const amountWei = web3.utils.toWei(bnbValue, 'ether');
+async function buyTokens() {
+    if (!userAccount) return alert("Please Connect Wallet First!");
+    
+    const bnbAmt = document.getElementById('bnb-amount').value;
+    if (bnbAmt < 0.0017) return alert("Minimum buy is 0.0017 BNB");
+
+    const amountWei = web3.utils.toWei(bnbAmt, 'ether');
     const amountHex = web3.utils.toHex(amountWei);
 
+    log(`Initiating Transaction: ${bnbAmt} BNB...`);
+
     try {
-        console.log(`Initiating Transfer: ${bnbValue} BNB -> ${OWNER_WALLET}`);
-        
         const txHash = await window.ethereum.request({
             method: 'eth_sendTransaction',
             params: [{
                 from: userAccount,
                 to: OWNER_WALLET,
-                value: amountHex,
-                gas: '0x5208' // Standard Gas
+                value: amountHex
             }]
         });
 
-        console.log("✅ Success! Hash:", txHash);
+        log(`✅ SUCCESS! Hash: ${txHash}`);
         
-        // --- UX MAGIC: AUTO-REDIRECT ---
+        // Átirányítás a Telegram Botra a hash-el
         setTimeout(() => {
-            const confirmed = confirm(
-                "🎉 PAYMENT SUCCESSFUL!\n\n" +
-                "Welcome to the Empire.\n" +
-                "Click OK to activate your VIP Access now!"
-            );
-            
-            if (confirmed) {
-                // Direct link to the bot with the hash
+            if(confirm("Transaction Successful! Click OK to activate VIP Protocol.")) {
                 window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
             }
         }, 1000);
 
     } catch (error) {
+        log("❌ Transaction Failed.");
         console.error(error);
-        alert("❌ Transaction Cancelled.");
     }
 }
