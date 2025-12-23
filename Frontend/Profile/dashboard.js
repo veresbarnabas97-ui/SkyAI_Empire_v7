@@ -1,42 +1,28 @@
-// ⚜️ Founder's Sanctum Logic
+const PRESALE_ABI = [
+    { "inputs": [], "name": "totalBnBRaised", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }
+];
 
-// --- DATE DISPLAY ---
-function updateDate() {
-    const now = new Date();
-    const options = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit' 
-    };
-    document.getElementById('current-date').innerText = now.toLocaleDateString('en-US', options).toUpperCase();
-}
+async function updateDashboardStats() {
+    if (typeof window.ethereum !== 'undefined') {
+        const web3 = new Web3(window.ethereum);
+        const contract = new web3.eth.Contract(PRESALE_ABI, "0x1fD631d33c1973158fdae72eBCa9Ca8285cE978c");
 
-// --- NAVIGATION LOGIC ---
-function showSection(sectionId) {
-    // 1. Hide all sections
-    const sections = document.querySelectorAll('.content-section');
-    sections.forEach(sec => sec.style.display = 'none');
-
-    // 2. Show the selected section
-    const activeSection = document.getElementById(sectionId);
-    if (activeSection) {
-        activeSection.style.display = 'block';
+        try {
+            // Valós BNB bevétel lekérése a szerződésből
+            const raisedWei = await contract.methods.totalBnBRaised().call();
+            const raisedBNB = web3.utils.fromWei(raisedWei, 'ether');
+            
+            // UI frissítése (ha léteznek az ID-k)
+            document.querySelector(".stats-grid .card:nth-child(2) .value").innerText = raisedBNB + " BNB";
+            console.log("Dashboard frissítve a blokkláncról.");
+        } catch (e) {
+            console.error("Hiba a statisztikák lekérésekor:", e);
+        }
     }
-
-    // 3. Update Menu Active State
-    const menuItems = document.querySelectorAll('.menu li');
-    menuItems.forEach(item => item.classList.remove('active'));
-    
-    // Find the clicked item (based on onclick matching) and add active class
-    // (This is a simple loop match)
-    event.target.classList.add('active');
 }
 
-// --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", () => {
-    updateDate();
-    setInterval(updateDate, 60000); // Update time every minute
+    updateDashboardStats();
+    // 5 percenként frissít
+    setInterval(updateDashboardStats, 300000);
 });
