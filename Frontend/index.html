@@ -3,126 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyAI Empire | v8.0 Neural Interface</title>
+    <title>SkyAI Empire | v9.0 Gateway</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/web3@1.6.1/dist/web3.min.js"></script>
     <script src="script.js" defer></script>
 </head>
 <body>
-
     <div class="scanline"></div>
     <div class="terminal-wrapper">
         
         <header>
-            <div class="brand">
-                <span class="glitch" data-text="SKY_AI">SKY_AI</span> 
-                <span class="version">v8.2 [DUAL_CORE]</span>
+            <div class="brand">SKY_AI <span class="version">v9.0 PUBLIC</span></div>
+            <div>
+                <button id="connect-btn" class="cyber-btn">🔌 CONNECT WALLET</button>
             </div>
-            <div class="connection-status">
-                <span class="dot"></span> NET: BSC MAINNET
-            </div>
-            <button id="connect-btn" class="cyber-btn">🔌 INITIALIZE WALLET</button>
         </header>
 
         <main class="cyber-grid">
             
-            <section class="panel system-map-panel">
-                <h3 class="panel-title">⚡ LIVE SYSTEM ARCHITECTURE</h3>
-                
-                <div class="network-graph">
-                    <div class="node core">
-                        <div class="icon">🌌</div>
-                        <span>SKY_CORE</span>
-                    </div>
-
-                    <div class="node bot business">
-                        <div class="icon">🤖</div>
-                        <span>BUSINESS</span>
-                    </div>
-                    <div class="node bot brain">
-                        <div class="icon">🧠</div>
-                        <span>BRAIN AI</span>
-                    </div>
-                    <div class="node bot payment">
-                        <div class="icon">💰</div>
-                        <span>PAYMENT</span>
-                    </div>
-
-                    <div class="line link-1"></div>
-                    <div class="line link-2"></div>
-                    <div class="line link-3"></div>
-                </div>
-
+            <section class="panel">
+                <h3 class="panel-title">📡 SYSTEM FEED</h3>
                 <div class="console-output" id="console-log">
-                    > System Boot Sequence Initiated...<br>
-                    > Connecting to Neural Net...<br>
-                    > Main Distributor: ONLINE<br>
-                    > Waiting for Input...
+                    > Initializing v9.0 Protocol...<br>
+                    > Connecting to BSC Mainnet...<br>
+                    > Dual Core Engine: READY<br>
+                    > Waiting for user input...
+                </div>
+                <div style="margin-top: 20px; text-align: center;">
+                    <p style="font-size: 12px; color: #888;">FOUNDER ACCESS DETECTED?</p>
+                    <a href="Profile/index.html" class="cyber-btn gold" style="display:block; margin-top:10px;">ENTER SANCTUM (VIP)</a>
                 </div>
             </section>
 
-            <section class="panel trade-panel">
-                <h3 class="panel-title">💎 PUBLIC ALLOCATION (VOUCHER)</h3>
-                
+            <section class="panel">
+                <h3 class="panel-title">💎 PUBLIC VOUCHER (Q3)</h3>
                 <div class="token-display">
                     <div class="holo-circle"></div>
-                    <div class="token-info">
-                        <span class="label">CURRENT ASSET</span>
-                        <span class="value">SKY_VOUCHER</span>
-                        <small>Contract: 0xcBba...fa83</small>
+                    <div>
+                        <div style="font-size:20px; font-weight:bold;">SKY_VOUCHER</div>
+                        <div style="font-size:10px; color:#888;">Ratio: 1 BNB = 1,000,000 SKY</div>
                     </div>
                 </div>
-
-                <div class="trade-controls">
-                    <div class="input-box">
-                        <label>BNB INPUT</label>
-                        <input type="number" id="bnb-amount" placeholder="0.1" step="0.01">
-                    </div>
-                    <div class="arrow">⬇</div>
-                    <div class="input-box">
-                        <label>SKY OUTPUT</label>
-                        <input type="text" id="sky-amount" placeholder="100,000" disabled>
-                    </div>
-                </div>
-
-                <button id="buy-btn" class="cyber-btn mega">⚡ EXECUTE TRANSFER</button>
-                <p class="warning-text">⚠️ NOTE: You receive Voucher Tokens immediately. Verified Tokens are vested until Q3 Launch.</p>
+                
+                <input type="number" id="bnb-amount" placeholder="BNB Amount (Min 0.1)" style="width:100%; padding:10px; background:#000; border:1px solid #333; color:#fff; margin-bottom:10px;">
+                <input type="text" id="sky-amount" placeholder="SKY Output" disabled style="width:100%; padding:10px; background:#000; border:1px solid #333; color:#0aff00; margin-bottom:20px;">
+                
+                <button id="buy-btn" class="cyber-btn" style="width:100%;">INITIATE TRANSFER</button>
             </section>
 
-            <section class="panel links-panel">
+            <section class="panel">
                 <h3 class="panel-title">🔗 NEURAL LINKS</h3>
                 <div class="link-grid">
                     <a href="https://t.me/SkyAIBusinessBot" target="_blank" class="link-card">
-                        <span class="icon">🤖</span>
-                        <span class="name">BUSINESS HUB</span>
-                        <span class="status">ONLINE</span>
+                        <span>🤖 BUSINESS BOT</span> <span style="color:var(--neon-green)">ONLINE</span>
                     </a>
                     <a href="https://t.me/SkyAI_PaymentBot" target="_blank" class="link-card">
-                        <span class="icon">💰</span>
-                        <span class="name">PAYMENT VERIFIER</span>
-                        <span class="status">ACTIVE</span>
+                        <span>💰 PAYMENT BOT</span> <span style="color:var(--neon-green)">ACTIVE</span>
                     </a>
                     <a href="https://t.me/SkyAI00bot" target="_blank" class="link-card">
-                        <span class="icon">🧠</span>
-                        <span class="name">AI BRAIN</span>
-                        <span class="status">SIGNALS</span>
-                    </a>
-                    <a href="https://t.me/SkyAI00bot1" target="_blank" class="link-card highlight">
-                        <span class="icon">📡</span>
-                        <span class="name">SIGNAL CHANNEL</span>
-                        <span class="status">BROADCAST</span>
+                        <span>🧠 AI BRAIN</span> <span style="color:var(--neon-red)">BUSY</span>
                     </a>
                 </div>
             </section>
 
         </main>
-
-        <footer>
-            SYSTEM ID: SKY-8821-X | SECURITY LEVEL: MAXIMUM | <a href="#" style="color:#00f3ff">FOUNDER DASHBOARD</a>
-        </footer>
-
     </div>
-
 </body>
 </html>
